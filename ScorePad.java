@@ -62,14 +62,12 @@ public class ScorePad {
 		int fivesScore  = totalOf(5, roll);
 		int sixesScore  = totalOf(6, roll);
 		
-		System.out.println("Aces score: " + acesScore);
-		System.out.println("Twos score: " + twosScore);
-		System.out.println("Threes score: " + threesScore);
-		System.out.println("Fours score: " + foursScore);
-		System.out.println("Fives score: " + fivesScore);
-		System.out.println("Sixes score: " + sixesScore);
-		
-		// TODO
+		GUI.scoreTable.setValueAt(acesScore, GUI.ACES_ROW, 1);
+		GUI.scoreTable.setValueAt(twosScore, GUI.TWOS_ROW, 1);
+		GUI.scoreTable.setValueAt(threesScore, GUI.THREES_ROW, 1);
+		GUI.scoreTable.setValueAt(foursScore, GUI.FOURS_ROW, 1);
+		GUI.scoreTable.setValueAt(fivesScore, GUI.FIVES_ROW, 1);
+		GUI.scoreTable.setValueAt(sixesScore, GUI.SIXES_ROW, 1);
 	}
 	
 	/**
@@ -82,11 +80,17 @@ public class ScorePad {
 	 * @param x an integer representing how many of a kind (ex: 3 or 4 of a kind) to search for in {@code roll}
 	 */
 	private static void scoreXOfAKind(int[] roll, int x) {
+		int score = 0;
 		if(isXOfKind(roll, x)) {
-			System.out.println(x + " of a Kind score: " + sum(roll));
-		} else {
-			System.out.println(x + " of a Kind score: " + 0);
+			score = sum(roll);
 		}
+		
+		if(x == 3) {
+			GUI.scoreTable.setValueAt(score, GUI.THREE_OF_A_KIND_ROW, 1);
+		} else {
+			GUI.scoreTable.setValueAt(score, GUI.FOUR_OF_A_KIND_ROW, 1);
+		}
+		
 	}
 	
 	/**
@@ -98,11 +102,12 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreFullHouse(int[] roll) {
+		int score = 0;
 		if(isXOfKind(roll, 2) && isXOfKind(roll, 3)) {
-			System.out.println("Full House score: " + FULL_HOUSE_SCORE);
-		} else {
-			System.out.println("Full House score: 0");
+			score = FULL_HOUSE_SCORE;
 		}
+		
+		GUI.scoreTable.setValueAt(score, GUI.FULL_HOUSE_ROW, 1);
 	}
 	
 	/**
@@ -119,7 +124,7 @@ public class ScorePad {
 		int[] sortedNoDups = removeDuplicates(sortedRoll);
 		
 		if(sortedNoDups.length < 4) {
-			System.out.println("Small Straight score: 0");
+			GUI.scoreTable.setValueAt(0, GUI.SMALL_STRAIGHT_ROW, 1);
 			return;
 		}
 		
@@ -134,8 +139,7 @@ public class ScorePad {
 				}
 			}
 		}
-		
-		System.out.println("Small Straight score: " + score);
+		GUI.scoreTable.setValueAt(score, GUI.SMALL_STRAIGHT_ROW, 1);
 	}
 	
 	/**
@@ -147,6 +151,7 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreLargeStraight(int[] roll) {
+		int score = 0;
 		int[] sortedRoll = Arrays.copyOf(roll, roll.length);
 		Arrays.sort(sortedRoll);
 		
@@ -154,10 +159,10 @@ public class ScorePad {
 		int[] largeStraight2 = {2, 3, 4, 5, 6};
 		
 		if(equals(sortedRoll, largeStraight1) || equals(sortedRoll, largeStraight2)) {
-			System.out.println("Large Straight score: " + LARGE_STRAIGHT_SCORE);
-		} else {
-			System.out.println("Large Straight score: 0");
+			score = LARGE_STRAIGHT_SCORE;
 		}
+		
+		GUI.scoreTable.setValueAt(score, GUI.LARGE_STRAIGHT_ROW, 1);
 	}
 	
 	/**
@@ -171,14 +176,14 @@ public class ScorePad {
 	private static void scoreYahtzee(int[] roll) {
 		
 		if(!isXOfKind(roll, 5)) {
-			System.out.println("Yahtzee score: 0");
+			return;
 		}
 		
 		if(isFirstYahtzee == true) {
 			isFirstYahtzee = false;
-			System.out.println("Yahtzee score: " + YAHTZEE_SCORE);
+			GUI.scoreTable.setValueAt(YAHTZEE_SCORE, GUI.YAHTZEE_ROW, 1);
 		} else {
-			// TODO - get current Yahtzee score from GUI, add 100 to it
+			GUI.scoreTable.setValueAt((int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) + YAHTZEE_BONUS, GUI.YAHTZEE_ROW, 1);
 		}
 	}
 	
@@ -190,7 +195,8 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreChance(int[] roll) {
-		System.out.println("Chance score: " + sum(roll));
+		int score = sum(roll);
+		GUI.scoreTable.setValueAt(score, GUI.CHANCE_ROW, 1);
 	}
 	
 	/**

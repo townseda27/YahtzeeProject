@@ -39,10 +39,9 @@ public class GUI {
 	public final static int LARGE_STRAIGHT_ROW = 15;
 	public final static int YAHTZEE_ROW = 16;
 	public final static int CHANCE_ROW = 17;
-	public final static int YAHTZEE_BONUS_ROW = 18;
 	public final static int TOTAL_UPPER_ROW = 19;
-	public final static int TOTAL_LOWER_ROW = 20;
-	public final static int GRAND_TOTAL_ROW = 21;
+	public final static int TOTAL_LOWER_ROW = 19;
+	public final static int GRAND_TOTAL_ROW = 20;
 	private JButton rollBtn;
 	private JTextPane dice1;
 	private JTextPane dice2;
@@ -86,7 +85,6 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
 		String[] columnNames = {"Type",
         	"Score"};
 
@@ -109,74 +107,24 @@ public class GUI {
 				{"Lg. Straight", 0},
 				{"Yahtzee", 0},
 				{"Chance", 0},
-				{"Yahtzee Bonus", 0},
 				{"Total Upper", 0},
 				{"Total Lower", 0},
 				{"Grand Total", 0}
 		};
 
 		frmYahtzeegui = new JFrame();
+		frmYahtzeegui.setResizable(false);
 		frmYahtzeegui.setTitle("YahtzeeGUI");
-		frmYahtzeegui.setBounds(100, 100, 699, 388);
+		frmYahtzeegui.setBounds(100, 100, 769, 444);
 		frmYahtzeegui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frmYahtzeegui.getContentPane().setLayout(null);
-		
-		//JTable doesn't work with absolute layout, so maybe put JTable within panel that can't move in frame?
-		scoreTable = new JTable(typeScores, columnNames);
-		scoreTable.setEnabled(false);
-		scoreTable.setBounds(346, 161, 65, -105);
-		frmYahtzeegui.getContentPane().add(scoreTable, BorderLayout.EAST);
-		
-		//General idea for clicking on cell to confirm score
-		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
-			
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent event) {
-		    	
-		    	ScorePad s = new ScorePad();
-		    	Dice d = new Dice();
-		    	
-		        int row = scoreTable.rowAtPoint(event.getPoint());
-		        int col = scoreTable.columnAtPoint(event.getPoint());
-		        if (row == ACES_ROW && col == 1) {
-		           //s.scoreUpper(d.getDiceValues());
-		        	scoreTable.setValueAt(5, ACES_ROW, 1);
-		        } else if (row == TWOS_ROW && col == 1) {
-		        	scoreTable.setValueAt(8, TWOS_ROW, 1);
-		        } else if (row == THREES_ROW && col == 1) {
-		        	scoreTable.setValueAt(12, THREES_ROW, 1);
-		        } else if (row == FOURS_ROW && col == 1) {
-		        	scoreTable.setValueAt(16, FOURS_ROW, 1);
-		        } else if (row == FIVES_ROW && col == 1) {
-		        	scoreTable.setValueAt(20, FIVES_ROW, 1);
-		        } else if (row == SIXES_ROW && col == 1) {
-		        	scoreTable.setValueAt(24, SIXES_ROW, 1);
-		        } else if (row == THREE_OF_A_KIND_ROW && col == 1) {
-		        	scoreTable.setValueAt(16, THREE_OF_A_KIND_ROW, 1);
-		        } else if (row == FOUR_OF_A_KIND_ROW && col == 1) {
-		        	scoreTable.setValueAt(18, FOUR_OF_A_KIND_ROW, 1);
-		        } else if (row == FULL_HOUSE_ROW && col == 1) {
-		        	scoreTable.setValueAt(s.FULL_HOUSE_SCORE, FULL_HOUSE_ROW, 1);
-		        } else if (row == SMALL_STRAIGHT_ROW && col == 1) {
-		        	scoreTable.setValueAt(s.SMALL_STRAIGHT_SCORE, SMALL_STRAIGHT_ROW, 1);
-		        } else if (row == LARGE_STRAIGHT_ROW && col == 1) {
-		        	scoreTable.setValueAt(s.LARGE_STRAIGHT_SCORE, LARGE_STRAIGHT_ROW, 1);
-		        } else if (row == YAHTZEE_ROW && col == 1) {
-		        	scoreTable.setValueAt(s.YAHTZEE_SCORE, YAHTZEE_ROW, 1);
-		        } else if (row == CHANCE_ROW && col == 1) {
-		        	scoreTable.setValueAt(10, CHANCE_ROW, 1);
-		        } else if (row == YAHTZEE_BONUS_ROW && col == 1) {
-		        	scoreTable.setValueAt(s.YAHTZEE_BONUS, YAHTZEE_BONUS_ROW, 1);
-		        }  
-		    }
-		});
 		
 		
 		JPanel gameBoard = new JPanel();
 		frmYahtzeegui.getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		rollBtn = new JButton("Roll Dice");
-		rollBtn.setBounds(237, 11, 75, 23);
+		rollBtn.setBounds(225, 11, 94, 32);
+		rollBtn.setFocusable(false);
 		rollBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -248,6 +196,7 @@ public class GUI {
 			}
 		});
 		dice1LockBtn.setBounds(35, 85, 75, 20);
+		dice1LockBtn.setFocusable(false);
 		gameBoard.add(dice1LockBtn);
 		
 		JToggleButton dice2LockBtn = new JToggleButton("Lock");
@@ -265,6 +214,7 @@ public class GUI {
 			}
 		});
 		dice2LockBtn.setBounds(135, 85, 75, 20);
+		dice2LockBtn.setFocusable(false);
 		gameBoard.add(dice2LockBtn);
 		
 		JToggleButton dice3LockBtn = new JToggleButton("Lock");
@@ -282,6 +232,7 @@ public class GUI {
 			}
 		});
 		dice3LockBtn.setBounds(237, 85, 75, 20);
+		dice3LockBtn.setFocusable(false);
 		gameBoard.add(dice3LockBtn);
 		
 		JToggleButton dice4LockBtn = new JToggleButton("Lock");
@@ -299,6 +250,7 @@ public class GUI {
 			}
 		});
 		dice4LockBtn.setBounds(339, 85, 75, 20);
+		dice4LockBtn.setFocusable(false);
 		gameBoard.add(dice4LockBtn);
 		
 		JToggleButton dice5LockBtn = new JToggleButton("Lock");
@@ -316,7 +268,26 @@ public class GUI {
 			}
 		});
 		dice5LockBtn.setBounds(434, 85, 75, 20);
+		dice5LockBtn.setFocusable(false);
 		gameBoard.add(dice5LockBtn);
+		//frmYahtzeegui.getContentPane().setLayout(null);
+		
+		//JTable doesn't work with absolute layout, so maybe put JTable within panel that can't move in frame?
+		scoreTable = new JTable(typeScores, columnNames);
+		gameBoard.add(scoreTable);
+		scoreTable.setEnabled(false);
+		scoreTable.setBounds(546, 30, 177, 336);
+		scoreTable.setFocusable(false);
+		
+		//General idea for clicking on cell to confirm score
+		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent event) {
+		        ScorePad.update(d.getDiceValues());
+		        frmYahtzeegui.repaint();
+		    }
+		});
 		
 		
 	}
