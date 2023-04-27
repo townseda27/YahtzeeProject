@@ -370,6 +370,7 @@ public class GUI {
 				ScorePad.update(vals);
 				playAgainBtn.setVisible(false);
 				frmYahtzeegui.repaint();
+				rollBtn.setEnabled(true);
 			}
 		});
 		playAgainBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
