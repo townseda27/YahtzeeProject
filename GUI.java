@@ -18,44 +18,63 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Font;
+import javax.swing.JLabel;
 
 public class GUI {
 
-	private JFrame frmYahtzeegui;
+	private static JFrame frmYahtzeegui;
 	public static JTable scoreTable;
+	private final static int TURNS = 13;
+	private final static int ROLLS = 3;
 	
-	public final static int ACES_ROW = 1; //
-	public final static int TWOS_ROW = 2;
-	public final static int THREES_ROW = 3;
-	public final static int FOURS_ROW = 4;
-	public final static int FIVES_ROW = 5;
-	public final static int SIXES_ROW = 6;
-	public final static int UPPER_TOTAL_ROW = 7;
+	public final static int ACES_ROW = 2; //
+	public final static int TWOS_ROW = 3;
+	public final static int THREES_ROW = 4;
+	public final static int FOURS_ROW = 5;
+	public final static int FIVES_ROW = 6;
+	public final static int SIXES_ROW = 7;
+	public final static int UPPER_TOTAL_ROW = 9;
 	public final static int UPPER_BONUS_ROW = 8;
-	public final static int THREE_OF_A_KIND_ROW = 11;
-	public final static int FOUR_OF_A_KIND_ROW = 12;
-	public final static int FULL_HOUSE_ROW = 13;
-	public final static int SMALL_STRAIGHT_ROW = 14;
-	public final static int LARGE_STRAIGHT_ROW = 15;
-	public final static int YAHTZEE_ROW = 16;
-	public final static int CHANCE_ROW = 17;
-	public final static int TOTAL_UPPER_ROW = 19;
+	public final static int THREE_OF_A_KIND_ROW = 12;
+	public final static int FOUR_OF_A_KIND_ROW = 13;
+	public final static int FULL_HOUSE_ROW = 14;
+	public final static int SMALL_STRAIGHT_ROW = 15;
+	public final static int LARGE_STRAIGHT_ROW = 16;
+	public final static int YAHTZEE_ROW = 17;
+	public final static int CHANCE_ROW = 18;
 	public final static int TOTAL_LOWER_ROW = 19;
-	public final static int GRAND_TOTAL_ROW = 20;
-	private JButton rollBtn;
-	private JTextPane dice1;
-	private JTextPane dice2;
-	private JTextPane dice3;
-	private JTextPane dice4;
-	private JTextPane dice5;
-	private boolean dice1Lock = false;
-	private boolean dice2Lock = false;
-	private boolean dice3Lock = false;
-	private boolean dice4Lock = false;
-	private boolean dice5Lock = false;
-	private boolean started = false;
-	private Dice d = new Dice();
+	public final static int GRAND_TOTAL_ROW = 21;
+	public final static int[] validSelectionRows = {
+		ACES_ROW, TWOS_ROW, THREES_ROW, FOURS_ROW, FIVES_ROW, SIXES_ROW,
+		THREE_OF_A_KIND_ROW, FOUR_OF_A_KIND_ROW, FULL_HOUSE_ROW, SMALL_STRAIGHT_ROW,
+		LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW
+	};
+	private static JButton rollBtn;
+	private static JTextPane dice1;
+	private static JTextPane dice2;
+	private static JTextPane dice3;
+	private static JTextPane dice4;
+	private static JTextPane dice5;
+	private static boolean dice1Lock = false;
+	private static boolean dice2Lock = false;
+	private static boolean dice3Lock = false;
+	private static boolean dice4Lock = false;
+	private static boolean dice5Lock = false;
 	
+	private static Dice d;
+	private static int[] usedCategories;
+	private static int currTurn;
+	private static int currRoll;
+	private JLabel turnsLabel;
+	private JLabel rollLabel;
+	private static JToggleButton dice1LockBtn;
+	private static JToggleButton dice2LockBtn;
+	private static JToggleButton dice3LockBtn;
+	private static JToggleButton dice4LockBtn;
+	private static JToggleButton dice5LockBtn;
+	private static JButton playAgainBtn;
 	
 
 	/**
@@ -65,8 +84,21 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					d = new Dice();
+					usedCategories = new int[TURNS];
+					currTurn = 1;
+					currRoll = 1;
 					GUI window = new GUI();
-					window.frmYahtzeegui.setVisible(true);
+					d.reroll(true, true, true, true, true);
+		    		int[] vals = d.getDiceValues();
+		    		dice1.setText((Integer.toString(vals[0])));
+		    		dice2.setText((Integer.toString(vals[1])));
+		    		dice3.setText((Integer.toString(vals[2])));
+		    		dice4.setText((Integer.toString(vals[3])));
+		    		dice5.setText((Integer.toString(vals[4])));
+					frmYahtzeegui.setVisible(true);
+					ScorePad.update(vals);
+					frmYahtzeegui.repaint();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -86,30 +118,30 @@ public class GUI {
 	 */
 	private void initialize() {
 		String[] columnNames = {"Type",
-        	"Score"};
+        	"Score", "Used"};
 
 		Object[][] typeScores = {
-				{"Upper Section", 0}, 
-				{"Aces", 0},
-				{"Twos", 0},
-				{"Threes", 0},
-				{"Fours", 0},
-				{"Fives", 0},
-				{"Sixes", 0},
-				{"Upper Total", 0},
-				{"Upper Bonus", 0},
-				{"", ""},
-				{"Lower Section", 0},
-				{"3 of a kind", 0},
-				{"4 of a kind", 0},
-				{"Full House", 0},
-				{"Sm. Straight", 0},
-				{"Lg. Straight", 0},
-				{"Yahtzee", 0},
-				{"Chance", 0},
-				{"Total Upper", 0},
-				{"Total Lower", 0},
-				{"Grand Total", 0}
+				{"Upper Section", "Score", "Used"}, 
+				{"Aces", 0, ""},
+				{"Twos", 0, ""},
+				{"Threes", 0, ""},
+				{"Fours", 0, ""},
+				{"Fives", 0, ""},
+				{"Sixes", 0, ""},
+				{"Upper Total", 0, ""},
+				{"Upper Bonus", 0, ""},
+				{"", "", ""},
+				{"Lower Section", "", ""},
+				{"3 of a kind", 0, ""},
+				{"4 of a kind", 0, ""},
+				{"Full House", 0, ""},
+				{"Sm. Straight", 0, ""},
+				{"Lg. Straight", 0, ""},
+				{"Yahtzee", 0, ""},
+				{"Chance", 0, ""},
+				{"Total Lower", 0, ""},
+				{"", "", ""},
+				{"Grand Total", 0, ""}
 		};
 
 		frmYahtzeegui = new JFrame();
@@ -123,65 +155,59 @@ public class GUI {
 		frmYahtzeegui.getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		rollBtn = new JButton("Roll Dice");
-		rollBtn.setBounds(225, 11, 94, 32);
+		rollBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rollBtn.setBounds(183, 49, 113, 46);
 		rollBtn.setFocusable(false);
 		rollBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				ScorePad s = new ScorePad();
 		    	
-		    	if (!started) {
-		    		d.reroll(true, true, true, true, true);
-		    		started = true;
-		    		int[] vals = d.getDiceValues();
-		    		dice1.setText((Integer.toString(vals[0])));
-		    		dice2.setText((Integer.toString(vals[1])));
-		    		dice3.setText((Integer.toString(vals[2])));
-		    		dice4.setText((Integer.toString(vals[3])));
-		    		dice5.setText((Integer.toString(vals[4])));
-		    	} else {
-		    		d.reroll(!dice1Lock, !dice2Lock, !dice3Lock, !dice4Lock, !dice5Lock);
-		    		int[] vals = d.getDiceValues();
-		    		dice1.setText((Integer.toString(vals[0])));
-		    		dice2.setText((Integer.toString(vals[1])));
-		    		dice3.setText((Integer.toString(vals[2])));
-		    		dice4.setText((Integer.toString(vals[3])));
-		    		dice5.setText((Integer.toString(vals[4])));
+	    		d.reroll(!dice1Lock, !dice2Lock, !dice3Lock, !dice4Lock, !dice5Lock);
+	    		int[] vals = d.getDiceValues();
+	    		dice1.setText((Integer.toString(vals[0])));
+	    		dice2.setText((Integer.toString(vals[1])));
+	    		dice3.setText((Integer.toString(vals[2])));
+	    		dice4.setText((Integer.toString(vals[3])));
+	    		dice5.setText((Integer.toString(vals[4])));
+	    		
+	    		ScorePad.update(vals);
+	    		frmYahtzeegui.repaint();
+		    	
+		    	rollLabel.setText("Roll " + ++currRoll + "/" + ROLLS);
+		    	
+		    	if(currRoll > 2) {
+		    		rollBtn.setEnabled(false);
 		    	}
-		    	
-		    	
-				
 			}
 		});
 		gameBoard.setLayout(null);
 		
 		dice1 = new JTextPane();
 		dice1.setEditable(false);
-		dice1.setBounds(55, 54, 38, 20);
+		dice1.setBounds(183, 132, 38, 20);
 		gameBoard.add(dice1);
 		gameBoard.add(rollBtn);
 		
 		dice2 = new JTextPane();
 		dice2.setEditable(false);
-		dice2.setBounds(154, 54, 38, 20);
+		dice2.setBounds(183, 163, 38, 20);
 		gameBoard.add(dice2);
 		
 		dice3 = new JTextPane();
 		dice3.setEditable(false);
-		dice3.setBounds(254, 54, 38, 20);
+		dice3.setBounds(183, 194, 38, 20);
 		gameBoard.add(dice3);
 		
 		dice4 = new JTextPane();
 		dice4.setEditable(false);
-		dice4.setBounds(358, 54, 38, 20);
+		dice4.setBounds(183, 225, 38, 20);
 		gameBoard.add(dice4);
 		
 		dice5 = new JTextPane();
 		dice5.setEditable(false);
-		dice5.setBounds(451, 54, 38, 20);
+		dice5.setBounds(183, 256, 38, 20);
 		gameBoard.add(dice5);
 		
-		JToggleButton dice1LockBtn = new JToggleButton("Lock");
+		dice1LockBtn = new JToggleButton("Lock");
 		dice1LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice1Lock) {
@@ -195,11 +221,11 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice1LockBtn.setBounds(35, 85, 75, 20);
+		dice1LockBtn.setBounds(230, 132, 75, 20);
 		dice1LockBtn.setFocusable(false);
 		gameBoard.add(dice1LockBtn);
 		
-		JToggleButton dice2LockBtn = new JToggleButton("Lock");
+		dice2LockBtn = new JToggleButton("Lock");
 		dice2LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice2Lock) {
@@ -213,11 +239,11 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice2LockBtn.setBounds(135, 85, 75, 20);
+		dice2LockBtn.setBounds(230, 163, 75, 20);
 		dice2LockBtn.setFocusable(false);
 		gameBoard.add(dice2LockBtn);
 		
-		JToggleButton dice3LockBtn = new JToggleButton("Lock");
+		dice3LockBtn = new JToggleButton("Lock");
 		dice3LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice3Lock) {
@@ -231,11 +257,11 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice3LockBtn.setBounds(237, 85, 75, 20);
+		dice3LockBtn.setBounds(231, 194, 75, 20);
 		dice3LockBtn.setFocusable(false);
 		gameBoard.add(dice3LockBtn);
 		
-		JToggleButton dice4LockBtn = new JToggleButton("Lock");
+		dice4LockBtn = new JToggleButton("Lock");
 		dice4LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice4Lock) {
@@ -249,11 +275,11 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice4LockBtn.setBounds(339, 85, 75, 20);
+		dice4LockBtn.setBounds(231, 225, 75, 20);
 		dice4LockBtn.setFocusable(false);
 		gameBoard.add(dice4LockBtn);
 		
-		JToggleButton dice5LockBtn = new JToggleButton("Lock");
+		dice5LockBtn = new JToggleButton("Lock");
 		dice5LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice5Lock) {
@@ -267,28 +293,198 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice5LockBtn.setBounds(434, 85, 75, 20);
+		dice5LockBtn.setBounds(231, 256, 75, 20);
 		dice5LockBtn.setFocusable(false);
 		gameBoard.add(dice5LockBtn);
 		//frmYahtzeegui.getContentPane().setLayout(null);
 		
 		//JTable doesn't work with absolute layout, so maybe put JTable within panel that can't move in frame?
 		scoreTable = new JTable(typeScores, columnNames);
+		scoreTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		scoreTable.setModel(new DefaultTableModel(
+			new Object[][] {
+				{"Category", "Score", "Used?"},
+				{"Upper Section", "", ""},
+				{"Aces", null, ""},
+				{"Twos", null, ""},
+				{"Threes", null, ""},
+				{"Fours", null, ""},
+				{"Fives", null, ""},
+				{"Sixes", null, ""},
+				{"Upper Bonus", null, ""},
+				{"Upper Total", null, ""},
+				{"", "", ""},
+				{"Lower Section", "", ""},
+				{"3 of a kind", null, ""},
+				{"4 of a kind", null, ""},
+				{"Full House", null, ""},
+				{"Sm. Straight", null, ""},
+				{"Lg. Straight", null, ""},
+				{"Yahtzee", null, ""},
+				{"Chance", null, ""},
+				{"Total Lower", null, ""},
+				{"", null, ""},
+				{"Grand Total", null, ""},
+			},
+			new String[] {
+				"Type", "Score", "Used"
+			}
+		));
+		scoreTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+		scoreTable.getColumnModel().getColumn(1).setPreferredWidth(44);
+		scoreTable.getColumnModel().getColumn(2).setPreferredWidth(40);
 		gameBoard.add(scoreTable);
 		scoreTable.setEnabled(false);
-		scoreTable.setBounds(546, 30, 177, 336);
+		scoreTable.setBounds(437, 27, 232, 352);
 		scoreTable.setFocusable(false);
+		
+		turnsLabel = new JLabel("Turn 1/13");
+		turnsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		turnsLabel.setBounds(28, 145, 107, 28);
+		gameBoard.add(turnsLabel);
+		
+		rollLabel = new JLabel("Roll 1/3");
+		rollLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		rollLabel.setBounds(28, 194, 107, 28);
+		gameBoard.add(rollLabel);
+		
+		playAgainBtn = new JButton("Play again?");
+		playAgainBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearDiceValues();
+				clearLocks();
+				clearScoreTable();
+				usedCategories = new int[TURNS];
+				currTurn = 1;
+				turnsLabel.setText("Turn " + currTurn + "/" + TURNS);
+				currRoll = 1;
+				rollLabel.setText("Roll " + currRoll + "/" + ROLLS);
+				d.reroll(true, true, true, true, true);
+				int[] vals = d.getDiceValues();
+				dice1.setText((Integer.toString(vals[0])));
+	    		dice2.setText((Integer.toString(vals[1])));
+	    		dice3.setText((Integer.toString(vals[2])));
+	    		dice4.setText((Integer.toString(vals[3])));
+	    		dice5.setText((Integer.toString(vals[4])));
+				ScorePad.isFirstYahtzee = true;
+				ScorePad.update(vals);
+				playAgainBtn.setVisible(false);
+				frmYahtzeegui.repaint();
+			}
+		});
+		playAgainBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		playAgainBtn.setBounds(314, 333, 113, 46);
+		playAgainBtn.setVisible(false);
+		gameBoard.add(playAgainBtn);
 		
 		//General idea for clicking on cell to confirm score
 		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
 			
 		    @Override
 		    public void mouseClicked(java.awt.event.MouseEvent event) {
-		        ScorePad.update(d.getDiceValues());
-		        frmYahtzeegui.repaint();
+		    	int row = scoreTable.rowAtPoint(event.getPoint());
+		    	
+		    	if(!(ScorePad.contains(validSelectionRows, row)) || isUsedRow(row)) {
+		    		return;
+		    	}
+		    	
+		    	currTurn++;		    	
+		    	scoreTable.setValueAt("X", row, 2);
+		    	
+		    	if(currTurn > 13) {
+		    		endGame();
+		    		return;
+		    	}
+		    	
+		    	usedCategories[currTurn - 1] = row;
+		    	turnsLabel.setText("Turn " + currTurn + "/" + TURNS);
+		    	currRoll = 1;
+		    	rollLabel.setText("Roll " + currRoll + "/" + ROLLS);
+		    	rollBtn.setEnabled(true);
+		    	
+		    	clearLocks();
+		    	clearDiceValues();
+		    	
+		    	
 		    }
 		});
+	}
+	
+	private static void clearLocks() {
+		dice1Lock = false;
+		dice1LockBtn.setText("Lock");
+		dice1LockBtn.setSelected(false);
+		dice2Lock = false;
+		dice2LockBtn.setText("Lock");
+		dice2LockBtn.setSelected(false);
+		dice3Lock = false;
+		dice3LockBtn.setText("Lock");
+		dice3LockBtn.setSelected(false);
+		dice4Lock = false;
+		dice4LockBtn.setText("Lock");
+		dice4LockBtn.setSelected(false);
+		dice5Lock = false;
+		dice5LockBtn.setText("Lock");
+		dice5LockBtn.setSelected(false);
+	}
+	
+	private static void clearDiceValues() {
+		d.reroll(true, true, true, true, true);
+		int[] vals = d.getDiceValues();
+		dice1.setText((Integer.toString(vals[0])));
+		dice2.setText((Integer.toString(vals[1])));
+		dice3.setText((Integer.toString(vals[2])));
+		dice4.setText((Integer.toString(vals[3])));
+		dice5.setText((Integer.toString(vals[4])));
+		ScorePad.update(vals);
+		frmYahtzeegui.repaint();
+	}
+	
+	public static boolean isUsedRow(int row) {
+		return ScorePad.contains(usedCategories, row);
+	}
+	
+	public static void endGame() {
+		clearDiceValues();
+		clearLocks();
+		int sumUpper = sumUpper();	
+		if(sumUpper > ScorePad.UPPER_BONUS_REQ) {
+			scoreTable.setValueAt(ScorePad.UPPER_BONUS_VALUE, UPPER_BONUS_ROW, 1);
+			sumUpper += ScorePad.UPPER_BONUS_VALUE;
+		} else {
+			scoreTable.setValueAt(0, UPPER_BONUS_ROW, 1);
+		}
 		
+		scoreTable.setValueAt(sumUpper, UPPER_TOTAL_ROW, 1);
+		scoreTable.setValueAt(sumLower(), TOTAL_LOWER_ROW, 1);
+		scoreTable.setValueAt(sumUpper + sumLower(), GRAND_TOTAL_ROW, 1);
 		
+		playAgainBtn.setVisible(true);
+	}
+	
+	private static int sumUpper() {
+		return (int) scoreTable.getValueAt(ACES_ROW, 1) +
+			   (int) scoreTable.getValueAt(TWOS_ROW, 1) +
+			   (int) scoreTable.getValueAt(THREES_ROW, 1) +
+			   (int) scoreTable.getValueAt(FOURS_ROW, 1) +
+			   (int) scoreTable.getValueAt(FIVES_ROW, 1) +
+			   (int) scoreTable.getValueAt(SIXES_ROW, 1);
+	}
+	
+	private static int sumLower() {
+		return (int) scoreTable.getValueAt(THREE_OF_A_KIND_ROW, 1) +
+			   (int) scoreTable.getValueAt(FOUR_OF_A_KIND_ROW, 1) +
+			   (int) scoreTable.getValueAt(FULL_HOUSE_ROW, 1) +
+			   (int) scoreTable.getValueAt(SMALL_STRAIGHT_ROW, 1) +
+			   (int) scoreTable.getValueAt(LARGE_STRAIGHT_ROW, 1) +
+			   (int) scoreTable.getValueAt(YAHTZEE_ROW, 1) +
+			   (int) scoreTable.getValueAt(CHANCE_ROW, 1);
+	}
+	
+	private static void clearScoreTable() {
+		for(int row = 2; row <= GRAND_TOTAL_ROW; row++) {
+			scoreTable.setValueAt(null, row, 1);
+			scoreTable.setValueAt(null, row, 2);
+		}
 	}
 }

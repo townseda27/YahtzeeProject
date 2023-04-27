@@ -15,7 +15,9 @@ public class ScorePad {
 	public static final int LARGE_STRAIGHT_SCORE = 40;
 	public static final int YAHTZEE_SCORE = 50;
 	public static final int YAHTZEE_BONUS = 100;
-	private static boolean isFirstYahtzee = true;
+	public static final int UPPER_BONUS_REQ = 63;
+	public static final int UPPER_BONUS_VALUE = 35;
+	public static boolean isFirstYahtzee = true;
 	
 	
 	/**
@@ -62,12 +64,29 @@ public class ScorePad {
 		int fivesScore  = totalOf(5, roll);
 		int sixesScore  = totalOf(6, roll);
 		
-		GUI.scoreTable.setValueAt(acesScore, GUI.ACES_ROW, 1);
-		GUI.scoreTable.setValueAt(twosScore, GUI.TWOS_ROW, 1);
-		GUI.scoreTable.setValueAt(threesScore, GUI.THREES_ROW, 1);
-		GUI.scoreTable.setValueAt(foursScore, GUI.FOURS_ROW, 1);
-		GUI.scoreTable.setValueAt(fivesScore, GUI.FIVES_ROW, 1);
-		GUI.scoreTable.setValueAt(sixesScore, GUI.SIXES_ROW, 1);
+		if(!GUI.isUsedRow(GUI.ACES_ROW)) {
+			GUI.scoreTable.setValueAt(acesScore, GUI.ACES_ROW, 1);
+		}
+		
+		if(!GUI.isUsedRow(GUI.TWOS_ROW)) {
+			GUI.scoreTable.setValueAt(twosScore, GUI.TWOS_ROW, 1);
+		}
+		
+		if(!GUI.isUsedRow(GUI.THREES_ROW)) {
+			GUI.scoreTable.setValueAt(threesScore, GUI.THREES_ROW, 1);
+		}
+		
+		if(!GUI.isUsedRow(GUI.FOURS_ROW)) {
+			GUI.scoreTable.setValueAt(foursScore, GUI.FOURS_ROW, 1);
+		}
+		
+		if(!GUI.isUsedRow(GUI.FIVES_ROW)) {
+			GUI.scoreTable.setValueAt(fivesScore, GUI.FIVES_ROW, 1);
+		}
+		
+		if(!GUI.isUsedRow(GUI.SIXES_ROW)) {
+			GUI.scoreTable.setValueAt(sixesScore, GUI.SIXES_ROW, 1);
+		}
 	}
 	
 	/**
@@ -80,6 +99,14 @@ public class ScorePad {
 	 * @param x an integer representing how many of a kind (ex: 3 or 4 of a kind) to search for in {@code roll}
 	 */
 	private static void scoreXOfAKind(int[] roll, int x) {
+		if(GUI.isUsedRow(GUI.THREE_OF_A_KIND_ROW) && x == 3) {
+			return;
+		}
+		
+		if(GUI.isUsedRow(GUI.FOUR_OF_A_KIND_ROW) && x == 4) {
+			return;
+		}
+		
 		int score = 0;
 		if(isXOfKind(roll, x)) {
 			score = sum(roll);
@@ -90,7 +117,7 @@ public class ScorePad {
 		} else {
 			GUI.scoreTable.setValueAt(score, GUI.FOUR_OF_A_KIND_ROW, 1);
 		}
-		
+
 	}
 	
 	/**
@@ -102,6 +129,10 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreFullHouse(int[] roll) {
+		if(GUI.isUsedRow(GUI.FULL_HOUSE_ROW)) {
+			return;
+		}
+		
 		int score = 0;
 		if(isXOfKind(roll, 2) && isXOfKind(roll, 3)) {
 			score = FULL_HOUSE_SCORE;
@@ -119,6 +150,10 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreSmallStraight(int[] roll) {
+		if(GUI.isUsedRow(GUI.SMALL_STRAIGHT_ROW)) {
+			return;
+		}
+		
 		int[] sortedRoll = Arrays.copyOf(roll, roll.length);
 		Arrays.sort(sortedRoll);
 		int[] sortedNoDups = removeDuplicates(sortedRoll);
@@ -151,6 +186,10 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreLargeStraight(int[] roll) {
+		if(GUI.isUsedRow(GUI.LARGE_STRAIGHT_ROW)) {
+			return;
+		}
+		
 		int score = 0;
 		int[] sortedRoll = Arrays.copyOf(roll, roll.length);
 		Arrays.sort(sortedRoll);
@@ -174,8 +213,13 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreYahtzee(int[] roll) {
-		
 		if(!isXOfKind(roll, 5)) {
+			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) == null) {
+				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_ROW, 1);
+			} else {
+				GUI.scoreTable.setValueAt((int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1), GUI.YAHTZEE_ROW, 1);
+			}
+			
 			return;
 		}
 		
@@ -195,6 +239,10 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreChance(int[] roll) {
+		if(GUI.isUsedRow(GUI.CHANCE_ROW)) {
+			return;
+		}
+		
 		int score = sum(roll);
 		GUI.scoreTable.setValueAt(score, GUI.CHANCE_ROW, 1);
 	}
@@ -241,7 +289,7 @@ public class ScorePad {
 	 * @param x an integer to search {@code arr} for
 	 * @return a boolean, representing whether or not {@code x} was found in the array
 	 */
-	private static boolean contains(int[] arr, int x) {
+	public static boolean contains(int[] arr, int x) {
 		if(arr == null || arr.length == 0) return false;
 		
 		for(int num : arr) {
