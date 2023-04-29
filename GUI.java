@@ -15,6 +15,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
@@ -51,7 +52,7 @@ public class GUI {
 		THREE_OF_A_KIND_ROW, FOUR_OF_A_KIND_ROW, FULL_HOUSE_ROW, SMALL_STRAIGHT_ROW,
 		LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW
 	};
-	private static JButton rollBtn;
+	public static JButton rollBtn;
 	private static JTextPane dice1;
 	private static JTextPane dice2;
 	private static JTextPane dice3;
@@ -69,12 +70,13 @@ public class GUI {
 	private static int currRoll;
 	private JLabel turnsLabel;
 	private JLabel rollLabel;
-	private static JToggleButton dice1LockBtn;
-	private static JToggleButton dice2LockBtn;
-	private static JToggleButton dice3LockBtn;
-	private static JToggleButton dice4LockBtn;
-	private static JToggleButton dice5LockBtn;
-	private static JButton playAgainBtn;
+	public static JToggleButton dice1LockBtn;
+	public static JToggleButton dice2LockBtn;
+	public static JToggleButton dice3LockBtn;
+	public static JToggleButton dice4LockBtn;
+	public static JToggleButton dice5LockBtn;
+	public static JButton playAgainBtn;
+	private JPanel gameBoard;
 	
 
 	/**
@@ -151,7 +153,7 @@ public class GUI {
 		frmYahtzeegui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
-		JPanel gameBoard = new JPanel();
+		gameBoard = new JPanel();
 		frmYahtzeegui.getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		rollBtn = new JButton("Roll Dice");
@@ -380,33 +382,9 @@ public class GUI {
 		
 		//General idea for clicking on cell to confirm score
 		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
-			
 		    @Override
 		    public void mouseClicked(java.awt.event.MouseEvent event) {
-		    	int row = scoreTable.rowAtPoint(event.getPoint());
-		    	
-		    	if(!(ScorePad.contains(validSelectionRows, row)) || isUsedRow(row)) {
-		    		return;
-		    	}
-		    	
-		    	currTurn++;		    	
-		    	scoreTable.setValueAt("X", row, 2);
-		    	
-		    	if(currTurn > 13) {
-		    		endGame();
-		    		return;
-		    	}
-		    	
-		    	usedCategories[currTurn - 1] = row;
-		    	turnsLabel.setText("Turn " + currTurn + "/" + TURNS);
-		    	currRoll = 1;
-		    	rollLabel.setText("Roll " + currRoll + "/" + ROLLS);
-		    	rollBtn.setEnabled(true);
-		    	
-		    	clearLocks();
-		    	clearDiceValues();
-		    	
-		    	
+		    	handleRowClick(event);
 		    }
 		});
 	}
@@ -487,5 +465,30 @@ public class GUI {
 			scoreTable.setValueAt(null, row, 1);
 			scoreTable.setValueAt(null, row, 2);
 		}
+	}
+	
+	public void handleRowClick(MouseEvent event) {
+		int row = scoreTable.rowAtPoint(event.getPoint());
+    	
+    	if(!(ScorePad.contains(validSelectionRows, row)) || isUsedRow(row)) {
+    		return;
+    	}
+    	
+    	currTurn++;		    	
+    	scoreTable.setValueAt("X", row, 2);
+    	
+    	if(currTurn > 13) {
+    		endGame();
+    		return;
+    	}
+    	
+    	usedCategories[currTurn - 1] = row;
+    	turnsLabel.setText("Turn " + currTurn + "/" + TURNS);
+    	currRoll = 1;
+    	rollLabel.setText("Roll " + currRoll + "/" + ROLLS);
+    	rollBtn.setEnabled(true);
+    	
+    	clearLocks();
+    	clearDiceValues();
 	}
 }

@@ -50,58 +50,58 @@ public class Dice {
 	}
 
 	// method used to test the class by printing the dice array
-	public void printDice() {
-		System.out.print("[");
-		for (int i = 0; i < 5; i++) {
-			if (i == 4) {
-				System.out.print(dice[i]);
-			} else {
-				System.out.print(dice[i] + ", ");
-			}
-		}
-		System.out.println("]");
-	}
+//	public void printDice() {
+//		System.out.print("[");
+//		for (int i = 0; i < 5; i++) {
+//			if (i == 4) {
+//				System.out.print(dice[i]);
+//			} else {
+//				System.out.print(dice[i] + ", ");
+//			}
+//		}
+//		System.out.println("]");
+//	}
 
 	// method used to test the class by printing the rounds 2D array
-	public void printRounds() {
-		if(rounds[0] != null) {System.out.print("{");}
-		for (int i = 0; i < rounds.length && rounds[i] != null; i++) {
-			System.out.print("[");
-			for (int j = 0; j < rounds[i].length; j++) {
-				if (j == rounds[i].length - 1) {
-					System.out.print(rounds[i][j]);
-				} else {
-					System.out.print(rounds[i][j] + ", ");
-				}
-			}
-			System.out.print("]");
-			if (i == rounds.length - 1 || rounds[i + 1] == null) {
-				System.out.println("}");
-			} else {
-				System.out.print(", ");
-			}
-		}
-	}
+//	public void printRounds() {
+//		if(rounds[0] != null) {System.out.print("{");}
+//		for (int i = 0; i < rounds.length && rounds[i] != null; i++) {
+//			System.out.print("[");
+//			for (int j = 0; j < rounds[i].length; j++) {
+//				if (j == rounds[i].length - 1) {
+//					System.out.print(rounds[i][j]);
+//				} else {
+//					System.out.print(rounds[i][j] + ", ");
+//				}
+//			}
+//			System.out.print("]");
+//			if (i == rounds.length - 1 || rounds[i + 1] == null) {
+//				System.out.println("}");
+//			} else {
+//				System.out.print(", ");
+//			}
+//		}
+//	}
 
 	// method that stores the current dice array in the rounds array and resets the
 	// dice array
-	public void finishRound() {
-		if(rounds[12] != null) {
-			System.out.println("Rounds array is full");
-			return;
-		}
-		for (int i = 0; i < 13; i++) {
-			if (rounds[i] == null) {
-				int[] round = new int[dice.length];
-				for (int j = 0; j < dice.length; j++) {
-					round[j] = dice[j];
-				}
-				rounds[i] = round;
-				resetDice();
-				return;
-			}
-		}
-	}
+//	public void finishRound() {
+//		if(rounds[12] != null) {
+//			System.out.println("Rounds array is full");
+//			return;
+//		}
+//		for (int i = 0; i < 13; i++) {
+//			if (rounds[i] == null) {
+//				int[] round = new int[dice.length];
+//				for (int j = 0; j < dice.length; j++) {
+//					round[j] = dice[j];
+//				}
+//				rounds[i] = round;
+//				resetDice();
+//				return;
+//			}
+//		}
+//	}
 
 	// reset method uses for loop to randomize dice values
 	public void resetDice() {

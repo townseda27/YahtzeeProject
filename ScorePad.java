@@ -41,15 +41,6 @@ public class ScorePad {
 	}
 	
 	/**
-	 * Resets the score pad
-	 */
-	public static void reset() {
-		isFirstYahtzee = true;
-		
-		// TODO - need GUI done first
-	}
-	
-	/**
 	 * Updates the GUI with the total score for each category in the upper section. If a category is
 	 * in the upper section is already scored, the GUI will not be updated for that category.
 	 * 
