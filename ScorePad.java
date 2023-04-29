@@ -99,7 +99,7 @@ public class ScorePad {
 		}
 		
 		int score = 0;
-		if(isXOfKind(roll, x)) {
+		if(isAtLeastXOfKind(roll, x)) {
 			score = sum(roll);
 		}
 		
@@ -204,7 +204,7 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreYahtzee(int[] roll) {
-		if(!isXOfKind(roll, 5)) {
+		if(!isAtLeastXOfKind(roll, 5)) {
 			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) == null) {
 				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_ROW, 1);
 			} else {
@@ -288,6 +288,41 @@ public class ScorePad {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Returns true if {@code arr} contains {@code x} or an integer greater than x. 
+	 * 
+	 * @param arr an integer array to search through
+	 * @param x an integer to search {@code arr} for
+	 * @return a boolean, representing whether or not {@code x} was found in the array
+	 */
+	public static boolean containsXOrMore(int[] arr, int x) {
+		if(arr == null || arr.length == 0) return false;
+		
+		for(int num : arr) {
+			if(num >= x) return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Returns true if {@code roll} is at least X of a Kind (ex: at least 3 of a Kind).
+	 * 
+	 * @param roll the integer array representing the dice values
+	 * @param x an integer representing how many of a kind to search for
+	 * @return a boolean value representing if roll is at least X of a Kind (true) or not (false)
+	 */
+	private static boolean isAtLeastXOfKind(int[] roll, int x) {
+		// the value at index i represents the number of occurrences of i in roll
+		int[] totalArr = new int[7];
+		
+		for(int i = 0; i < roll.length; i++) {
+			totalArr[roll[i]]++;
+		}
+		
+		return containsXOrMore(totalArr, x);
 	}
 	
 	/**

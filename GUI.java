@@ -25,10 +25,10 @@ import javax.swing.JLabel;
 
 public class GUI {
 
-	private static JFrame frmYahtzeegui;
+	public static JFrame frmYahtzeegui;
 	public static JTable scoreTable;
-	private final static int TURNS = 13;
-	private final static int ROLLS = 3;
+	public final static int TURNS = 13;
+	public final static int ROLLS = 3;
 	
 	public final static int ACES_ROW = 2; //
 	public final static int TWOS_ROW = 3;
@@ -53,23 +53,23 @@ public class GUI {
 		LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW
 	};
 	public static JButton rollBtn;
-	private static JTextPane dice1;
-	private static JTextPane dice2;
-	private static JTextPane dice3;
-	private static JTextPane dice4;
-	private static JTextPane dice5;
+	public static JTextPane dice1;
+	public static JTextPane dice2;
+	public static JTextPane dice3;
+	public static JTextPane dice4;
+	public static JTextPane dice5;
 	private static boolean dice1Lock = false;
 	private static boolean dice2Lock = false;
 	private static boolean dice3Lock = false;
 	private static boolean dice4Lock = false;
 	private static boolean dice5Lock = false;
 	
-	private static Dice d;
-	private static int[] usedCategories;
-	private static int currTurn;
-	private static int currRoll;
-	private JLabel turnsLabel;
-	private JLabel rollLabel;
+	public static Dice d;
+	public static int[] usedCategories;
+	public static int currTurn;
+	public static int currRoll;
+	public static JLabel turnsLabel;
+	public static JLabel rollLabel;
 	public static JToggleButton dice1LockBtn;
 	public static JToggleButton dice2LockBtn;
 	public static JToggleButton dice3LockBtn;
@@ -467,9 +467,10 @@ public class GUI {
 		}
 	}
 	
-	public void handleRowClick(MouseEvent event) {
+	public static void handleRowClick(MouseEvent event) {
+		
 		int row = scoreTable.rowAtPoint(event.getPoint());
-    	
+		
     	if(!(ScorePad.contains(validSelectionRows, row)) || isUsedRow(row)) {
     		return;
     	}
