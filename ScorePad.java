@@ -1,5 +1,6 @@
 package YahtzeeProject;
 
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 /**
@@ -145,27 +146,15 @@ public class ScorePad {
 			return;
 		}
 		
-		int[] sortedRoll = Arrays.copyOf(roll, roll.length);
-		Arrays.sort(sortedRoll);
-		int[] sortedNoDups = removeDuplicates(sortedRoll);
-		
-		if(sortedNoDups.length < 4) {
+		if(contains(roll, 1) && contains(roll, 2) && contains(roll, 3) && contains(roll, 4)) {
+			GUI.scoreTable.setValueAt(SMALL_STRAIGHT_SCORE, GUI.SMALL_STRAIGHT_ROW, 1);
+		} else if(contains(roll, 2) && contains(roll, 3) && contains(roll, 4) && contains(roll, 5)) {
+			GUI.scoreTable.setValueAt(SMALL_STRAIGHT_SCORE, GUI.SMALL_STRAIGHT_ROW, 1);
+		} else if(contains(roll, 3) && contains(roll, 4) && contains(roll, 5) && contains(roll, 6)) {
+			GUI.scoreTable.setValueAt(SMALL_STRAIGHT_SCORE, GUI.SMALL_STRAIGHT_ROW, 1);
+		} else {
 			GUI.scoreTable.setValueAt(0, GUI.SMALL_STRAIGHT_ROW, 1);
-			return;
 		}
-		
-		int score = 0;
-		int sequenceCount = 0;
-		for(int i = 0; i < sortedNoDups.length - 1; i++) {
-			if((sortedNoDups[i] + 1 == sortedNoDups[i + 1])) {
-				sequenceCount++;
-				if(sequenceCount == 4 - 1) {
-					score = SMALL_STRAIGHT_SCORE;
-					break;
-				}
-			}
-		}
-		GUI.scoreTable.setValueAt(score, GUI.SMALL_STRAIGHT_ROW, 1);
 	}
 	
 	/**
@@ -315,6 +304,10 @@ public class ScorePad {
 	 * @return a boolean value representing if roll is at least X of a Kind (true) or not (false)
 	 */
 	private static boolean isAtLeastXOfKind(int[] roll, int x) {
+		if(x < 2) {
+			return false;
+		}
+		
 		// the value at index i represents the number of occurrences of i in roll
 		int[] totalArr = new int[7];
 		
@@ -333,6 +326,10 @@ public class ScorePad {
 	 * @return a boolean value representing if roll is a X of a Kind (true) or not (false)
 	 */
 	private static boolean isXOfKind(int[] roll, int x) {
+		if(x < 2) {
+			return false;		
+		}
+		
 		// the value at index i represents the number of occurrences of i in roll
 		int[] totalArr = new int[7];
 		

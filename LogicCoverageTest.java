@@ -390,8 +390,161 @@ public class LogicCoverageTest {
 		doBefore();
 	}
 	
+	@Test
+	public void testScoreXOfAKind() {
+		int[] roll4OfAKind = {1, 1, 1, 1, 2};
+		ScorePad.update(roll4OfAKind);
+		MouseEvent eventRow3 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
+		GUI.handleRowClick(eventRow3);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), 6);
+		ScorePad.update(roll4OfAKind);
+		MouseEvent eventRow4 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOUR_OF_KIND_ROW_Y, 1, false);
+		GUI.handleRowClick(eventRow4);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FOUR_OF_A_KIND_ROW, 1), 6);
+		
+		doAfter();
+		doBefore();
+		
+		int[] rollNo4OfAKind = {1, 2, 3, 4, 5};
+		ScorePad.update(rollNo4OfAKind);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), 0);
+		ScorePad.update(rollNo4OfAKind);
+		GUI.handleRowClick(eventRow4);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FOUR_OF_A_KIND_ROW, 1), 0);
+	}
 	
+	@Test
+	public void testScoreFullHouse() {
+		// full house row is used
+		int roll[] = {1, 1, 2, 2, 2};
+		ScorePad.update(roll);
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FULL_HOUSE_ROW_Y, 1, false);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 25);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 25);
+		
+		doAfter();
+		doBefore();
+		
+		// full house is not used
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 25);
+		
+		doAfter();
+		doBefore();
+		
+		// roll is a full house
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
+		int[] fullHouseRoll = {1, 1, 1, 2, 2};
+		ScorePad.update(fullHouseRoll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 25);
+		
+		doAfter();
+		doBefore();
+		
+		// roll is a two of a kind and not a 3 of a kind
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
+		int[] twoOfKindRoll = {1, 3, 4, 2, 2};
+		ScorePad.update(twoOfKindRoll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
+		
+		// roll is a 3 of a kind and not a two of a kind for a different dice value
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
+		int[] threeOfKindRoll = {1, 3, 2, 2, 2};
+		ScorePad.update(threeOfKindRoll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
+		
+		// roll is not a 3 of a kind and roll is not a 2 of a kind
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
+		int[] neitherRoll = {1, 2, 3, 4, 5};
+		ScorePad.update(threeOfKindRoll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 0);
+	}
 	
-	
+	@Test
+	public void testScoreSmallStraight() {
+		// small straight row is used
+		int roll[] = {1, 3, 4, 2, 6};
+		ScorePad.update(roll);
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SM_STRAIGHT_ROW_Y, 1, false);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		
+		doAfter();
+		doBefore();
+		
+		// small straight row is not used
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		
+		doAfter();
+		doBefore();
+		
+		// sortedNoDups has length 4
+		int[] sortedNoDupsLength4 = {1, 2, 3, 4, 1};
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(sortedNoDupsLength4);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		
+		doAfter();
+		doBefore();
+		
+		// sortedNoDups has length > 4
+		int[] sortedNoDupsLengthGreater4 = {1, 2, 3, 4, 5};
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(sortedNoDupsLengthGreater4);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		
+		doAfter();
+		doBefore();
+		
+		// sortedNoDups has length < 4
+		int[] sortedNoDupsLengthLess4 = {1, 2, 3, 1, 1};
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(sortedNoDupsLengthLess4);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
+		
+		// sequence count is 3
+		int[] rollSeq3 = {1, 2, 3, 4, 6};
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(rollSeq3);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 30);
+		
+		doAfter();
+		doBefore();
+		
+		// sequence count is not 3
+		int[] rollSeqLess3 = {1, 2, 3, 5, 6};
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), null);
+		ScorePad.update(rollSeqLess3);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 0);
+	}
 	
 }
