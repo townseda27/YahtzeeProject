@@ -29,14 +29,22 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	public static void update(int[] roll) {
+		if(GUI.currTurn > 13) {
+			return;
+		}
 		if(roll != null && roll.length == 5) {
+			GUI.dice1.setText("" + roll[0]);
+			GUI.dice2.setText("" + roll[1]);
+			GUI.dice3.setText("" + roll[2]);
+			GUI.dice4.setText("" + roll[3]);
+			GUI.dice5.setText("" + roll[4]);
 			scoreUpper(roll);
 			scoreXOfAKind(roll, 3);
 			scoreXOfAKind(roll, 4);
 			scoreFullHouse(roll);
 			scoreSmallStraight(roll);
 			scoreLargeStraight(roll);
-			scoreYahtzee(roll);
+			scoreYahtzeeNew(roll);
 			scoreChance(roll);
 		}
 	}
@@ -193,6 +201,10 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreYahtzee(int[] roll) {
+		// branch off into new git branch
+		// try: adding yahtzee bonus row, change usedCategories too
+		// situation: if user chooses to score a yahtzee but does not roll
+		// a yahtzee, what do we do?
 		if(!isAtLeastXOfKind(roll, 5)) {
 			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) == null) {
 				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_ROW, 1);
@@ -208,6 +220,35 @@ public class ScorePad {
 			GUI.scoreTable.setValueAt(YAHTZEE_SCORE, GUI.YAHTZEE_ROW, 1);
 		} else {
 			GUI.scoreTable.setValueAt((int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) + YAHTZEE_BONUS, GUI.YAHTZEE_ROW, 1);
+		}
+	}
+	
+	private static void scoreYahtzeeNew(int[] roll) {
+		if(GUI.currTurn > 13) {
+			System.out.println("got here");
+		}
+		
+		if(isFirstYahtzee) {
+			if(!GUI.isUsedRow(GUI.YAHTZEE_ROW)) {
+				if(isXOfKind(roll, 5)) {
+					// not used and rolled yahtzee
+					GUI.scoreTable.setValueAt(YAHTZEE_SCORE, GUI.YAHTZEE_ROW, 1);
+				} else {
+					// not used and didn't roll yahtzee
+					GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_ROW, 1);
+				}
+			}
+		} else {
+			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1) == null) {
+				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_BONUS_ROW, 1);
+			}
+						
+			if(isXOfKind(roll, 5) && (int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) != 0) {
+				// not used and rolled yahtzee
+				GUI.scoreTable.setValueAt(GUI.yahtzeeBonusScore + YAHTZEE_BONUS, GUI.YAHTZEE_BONUS_ROW, 1);
+			} else {
+				GUI.scoreTable.setValueAt(GUI.yahtzeeBonusScore + 0, GUI.YAHTZEE_BONUS_ROW, 1);
+			}
 		}
 	}
 	
@@ -325,7 +366,7 @@ public class ScorePad {
 	 * @param x an integer representing how many of a kind to search for
 	 * @return a boolean value representing if roll is a X of a Kind (true) or not (false)
 	 */
-	private static boolean isXOfKind(int[] roll, int x) {
+	public static boolean isXOfKind(int[] roll, int x) {
 		if(x < 2) {
 			return false;		
 		}
@@ -355,46 +396,5 @@ public class ScorePad {
 		}
 		
 		return true;
-	}
-	
-	/**
-	 * Returns {@code arr} with the duplicates removed (if any exist).
-	 * 
-	 * @param arr an integer array to remove duplicates from.
-	 * @return
-	 */
-	private static int[] removeDuplicates(int[] arr) {
-		int[] noDups = new int[arr.length - countDuplicates(arr)];
-		
-		int noDupsIndex = 0;
-		for(int i = 0; i < arr.length; i++) {
-			if(!contains(noDups, arr[i])) {
-				noDups[noDupsIndex++] = arr[i];
-			}
-		}
-		
-		return noDups;
-	}
-	
-	/**
-	 * Returns the number of duplicate elements in {@code arr}.
-	 * 
-	 * @param arr an integer array to search for duplicates over.
-	 * @return an integer representing the number of duplicates.
-	 */
-	private static int countDuplicates(int[] arr) {
-		int duplicateCount = 0;
-		int[] duplicates = new int[4];
-		
-		for(int i = 0; i < arr.length; i++) {
-			for(int j = 0; j < arr.length; j++) {
-				if(i != j && arr[i] == arr[j] && !contains(duplicates, arr[i])) {
-					duplicates[duplicateCount] = arr[i];
-					duplicateCount++;
-				}
-			}
-		}
-		
-		return duplicateCount;
 	}
 }
