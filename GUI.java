@@ -183,7 +183,7 @@ public class GUI {
 		rollBtn.setForeground(Color.WHITE);
 		rollBtn.setBackground(Color.GRAY);
 		rollBtn.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		rollBtn.setBounds(183, 49, 113, 46);
+		rollBtn.setBounds(188, 47, 113, 46);
 		rollBtn.setFocusable(false);
 		rollBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -306,7 +306,7 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice3LockBtn.setBounds(231, 194, 75, 20);
+		dice3LockBtn.setBounds(230, 194, 75, 20);
 		dice3LockBtn.setFocusable(false);
 		gameBoard.add(dice3LockBtn);
 		
@@ -328,7 +328,7 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice4LockBtn.setBounds(231, 225, 75, 20);
+		dice4LockBtn.setBounds(230, 225, 75, 20);
 		dice4LockBtn.setFocusable(false);
 		gameBoard.add(dice4LockBtn);
 		
@@ -350,7 +350,7 @@ public class GUI {
 				gameBoard.repaint();
 			}
 		});
-		dice5LockBtn.setBounds(231, 256, 75, 20);
+		dice5LockBtn.setBounds(230, 256, 75, 20);
 		dice5LockBtn.setFocusable(false);
 		gameBoard.add(dice5LockBtn);
 		//frmYahtzeegui.getContentPane().setLayout(null);
@@ -400,13 +400,13 @@ public class GUI {
 		turnsLabel = new JLabel("Turn 1/13");
 		turnsLabel.setForeground(Color.WHITE);
 		turnsLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-		turnsLabel.setBounds(437, 396, 131, 28);
+		turnsLabel.setBounds(423, 408, 131, 28);
 		gameBoard.add(turnsLabel);
 		
 		rollLabel = new JLabel("Roll 1/3");
 		rollLabel.setForeground(Color.WHITE);
 		rollLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-		rollLabel.setBounds(607, 396, 107, 28);
+		rollLabel.setBounds(596, 408, 107, 28);
 		gameBoard.add(rollLabel);
 		
 		playAgainBtn = new JButton("Play again?");
@@ -439,7 +439,7 @@ public class GUI {
 			}
 		});
 		playAgainBtn.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
-		playAgainBtn.setBounds(183, 323, 113, 46);
+		playAgainBtn.setBounds(188, 323, 113, 46);
 		playAgainBtn.setVisible(false);
 		gameBoard.add(playAgainBtn);
 		
@@ -458,18 +458,23 @@ public class GUI {
 		dice1Lock = false;
 		dice1LockBtn.setText("Lock");
 		dice1LockBtn.setSelected(false);
+		dice1LockBtn.setForeground(Color.WHITE);
 		dice2Lock = false;
 		dice2LockBtn.setText("Lock");
 		dice2LockBtn.setSelected(false);
+		dice2LockBtn.setForeground(Color.WHITE);
 		dice3Lock = false;
 		dice3LockBtn.setText("Lock");
 		dice3LockBtn.setSelected(false);
+		dice3LockBtn.setForeground(Color.WHITE);
 		dice4Lock = false;
 		dice4LockBtn.setText("Lock");
 		dice4LockBtn.setSelected(false);
+		dice4LockBtn.setForeground(Color.WHITE);
 		dice5Lock = false;
 		dice5LockBtn.setText("Lock");
 		dice5LockBtn.setSelected(false);
+		dice5LockBtn.setForeground(Color.WHITE);
 	}
 	
 	private static void clearDiceValues() {
