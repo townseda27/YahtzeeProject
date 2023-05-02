@@ -43,14 +43,22 @@ public class GUI {
 	public final static int SMALL_STRAIGHT_ROW = 15;
 	public final static int LARGE_STRAIGHT_ROW = 16;
 	public final static int YAHTZEE_ROW = 17;
-	public final static int CHANCE_ROW = 18;
-	public final static int TOTAL_LOWER_ROW = 19;
-	public final static int GRAND_TOTAL_ROW = 21;
+	public final static int YAHTZEE_BONUS_ROW = 18;
+	public final static int CHANCE_ROW = 19;
+	public final static int TOTAL_LOWER_ROW = 20;
+	public final static int GRAND_TOTAL_ROW = 22;
 	public final static int[] validSelectionRows = {
 		ACES_ROW, TWOS_ROW, THREES_ROW, FOURS_ROW, FIVES_ROW, SIXES_ROW,
 		THREE_OF_A_KIND_ROW, FOUR_OF_A_KIND_ROW, FULL_HOUSE_ROW, SMALL_STRAIGHT_ROW,
-		LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW
+		LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW, YAHTZEE_BONUS_ROW
 	};
+	public final static int[] validUpperRows = {
+			ACES_ROW, TWOS_ROW, THREES_ROW, FOURS_ROW, FIVES_ROW, SIXES_ROW
+		};
+	public final static int[] validLowerRows = {
+			THREE_OF_A_KIND_ROW, FOUR_OF_A_KIND_ROW, FULL_HOUSE_ROW, SMALL_STRAIGHT_ROW,
+			LARGE_STRAIGHT_ROW, YAHTZEE_ROW, CHANCE_ROW, YAHTZEE_BONUS_ROW
+		};
 	public static JButton rollBtn;
 	public static JTextPane dice1;
 	public static JTextPane dice2;
@@ -76,6 +84,8 @@ public class GUI {
 	public static JToggleButton dice5LockBtn;
 	public static JButton playAgainBtn;
 	private JPanel gameBoard;
+	public static boolean gameOver = false;
+	public static int yahtzeeBonusScore = 0;
 	
 
 	/**
@@ -98,6 +108,9 @@ public class GUI {
 		    		dice4.setText((Integer.toString(vals[3])));
 		    		dice5.setText((Integer.toString(vals[4])));
 					frmYahtzeegui.setVisible(true);
+					for(int i = ACES_ROW; i <= GRAND_TOTAL_ROW; i++) {
+						scoreTable.setValueAt("", i, 2);
+					}
 					ScorePad.update(vals);
 					frmYahtzeegui.repaint();
 				} catch (Exception e) {
@@ -148,6 +161,7 @@ public class GUI {
 				{"Sm. Straight", 0, ""},
 				{"Lg. Straight", 0, ""},
 				{"Yahtzee", 0, ""},
+				{"Yahtzee Bonus", 0, ""},
 				{"Chance", 0, ""},
 				{"Total Lower", 0, ""},
 				{"", "", ""},
@@ -365,6 +379,7 @@ public class GUI {
 				{"Sm. Straight", null, ""},
 				{"Lg. Straight", null, ""},
 				{"Yahtzee", null, ""},
+				{"Yahtzee Bonus", null, ""},
 				{"Chance", null, ""},
 				{"Total Lower", null, ""},
 				{"", null, ""},
@@ -379,7 +394,7 @@ public class GUI {
 		scoreTable.getColumnModel().getColumn(2).setPreferredWidth(40);
 		gameBoard.add(scoreTable);
 		scoreTable.setEnabled(false);
-		scoreTable.setBounds(437, 27, 232, 352);
+		scoreTable.setBounds(437, 27, 232, 370);
 		scoreTable.setFocusable(false);
 		
 		turnsLabel = new JLabel("Turn 1/13");
@@ -399,6 +414,8 @@ public class GUI {
 		playAgainBtn.setBackground(Color.GRAY);
 		playAgainBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				gameOver = false;
+				yahtzeeBonusScore = 0;
 				clearDiceValues();
 				clearLocks();
 				clearScoreTable();
@@ -430,7 +447,9 @@ public class GUI {
 		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
 		    public void mouseClicked(java.awt.event.MouseEvent event) {
-		    	handleRowClick(event);
+		    	if(!gameOver) {
+		    		handleRowClick(event);
+		    	}
 		    }
 		});
 	}
@@ -470,9 +489,11 @@ public class GUI {
 	}
 	
 	public static void endGame() {
+		GUI.scoreTable.setValueAt("X", YAHTZEE_BONUS_ROW, 2);
+		GUI.scoreTable.setValueAt(yahtzeeBonusScore, YAHTZEE_BONUS_ROW, 1);
 		clearDiceValues();
 		clearLocks();
-		int sumUpper = sumUpper();	
+		int sumUpper = sumUpper();
 		if(sumUpper > ScorePad.UPPER_BONUS_REQ) {
 			scoreTable.setValueAt(ScorePad.UPPER_BONUS_VALUE, UPPER_BONUS_ROW, 1);
 			sumUpper += ScorePad.UPPER_BONUS_VALUE;
@@ -488,22 +509,29 @@ public class GUI {
 	}
 	
 	private static int sumUpper() {
-		return (int) scoreTable.getValueAt(ACES_ROW, 1) +
-			   (int) scoreTable.getValueAt(TWOS_ROW, 1) +
-			   (int) scoreTable.getValueAt(THREES_ROW, 1) +
-			   (int) scoreTable.getValueAt(FOURS_ROW, 1) +
-			   (int) scoreTable.getValueAt(FIVES_ROW, 1) +
-			   (int) scoreTable.getValueAt(SIXES_ROW, 1);
+		int score = 0;
+		for(int row : validUpperRows) {
+			if(scoreTable.getValueAt(row, 2) == null) {
+				continue;
+			}
+			if(scoreTable.getValueAt(row, 2).equals("X")) {
+				score += (int) scoreTable.getValueAt(row, 1);
+			}
+		}
+		return score;
 	}
 	
 	private static int sumLower() {
-		return (int) scoreTable.getValueAt(THREE_OF_A_KIND_ROW, 1) +
-			   (int) scoreTable.getValueAt(FOUR_OF_A_KIND_ROW, 1) +
-			   (int) scoreTable.getValueAt(FULL_HOUSE_ROW, 1) +
-			   (int) scoreTable.getValueAt(SMALL_STRAIGHT_ROW, 1) +
-			   (int) scoreTable.getValueAt(LARGE_STRAIGHT_ROW, 1) +
-			   (int) scoreTable.getValueAt(YAHTZEE_ROW, 1) +
-			   (int) scoreTable.getValueAt(CHANCE_ROW, 1);
+		int score = 0;
+		for(int row : validLowerRows) {
+			if(scoreTable.getValueAt(row, 2) == null) {
+				continue;
+			}
+			if(scoreTable.getValueAt(row, 2).equals("X")) {
+				score += (int) scoreTable.getValueAt(row, 1);
+			}
+		}
+		return score;
 	}
 	
 	private static void clearScoreTable() {
@@ -521,15 +549,49 @@ public class GUI {
     		return;
     	}
     	
-    	currTurn++;		    	
-    	scoreTable.setValueAt("X", row, 2);
+    	int roll[] = new int[5];
+    	roll[0] = Integer.parseInt(dice1.getText());
+    	roll[1] = Integer.parseInt(dice2.getText());
+    	roll[2] = Integer.parseInt(dice3.getText());
+    	roll[3] = Integer.parseInt(dice4.getText());
+    	roll[4] = Integer.parseInt(dice5.getText());
+    	
+    	if(row == YAHTZEE_BONUS_ROW && !ScorePad.isXOfKind(roll, 5)) {
+    		return;
+    	}
+    	
+    	if(row == YAHTZEE_BONUS_ROW && !isUsedRow(YAHTZEE_ROW)) {
+    		return;
+    	}
+    	
+    	if(row == YAHTZEE_BONUS_ROW && (int) scoreTable.getValueAt(row, 1) == 0) {
+    		return;
+    	}
+    	
+    	if(row == YAHTZEE_ROW && (int) scoreTable.getValueAt(row, 1) == 0) {
+    		scoreTable.setValueAt("X", YAHTZEE_BONUS_ROW, 2);
+    	}
+    	
+    	currTurn++;
+    	
+    	if(row == GUI.YAHTZEE_ROW) {
+    		ScorePad.isFirstYahtzee = false;
+    	}
     	
     	if(currTurn > 13) {
+    		gameOver = true;
+    		scoreTable.setValueAt("X", row, 2);
     		endGame();
     		return;
     	}
     	
-    	usedCategories[currTurn - 1] = row;
+    	if(row != GUI.YAHTZEE_BONUS_ROW) {
+    		scoreTable.setValueAt("X", row, 2);
+        	usedCategories[currTurn - 1] = row;
+    	} else {
+    		yahtzeeBonusScore = (int) scoreTable.getValueAt(YAHTZEE_BONUS_ROW, 1);
+    	}
+    	
     	turnsLabel.setText("Turn " + currTurn + "/" + TURNS);
     	currRoll = 1;
     	rollLabel.setText("Roll " + currRoll + "/" + ROLLS);

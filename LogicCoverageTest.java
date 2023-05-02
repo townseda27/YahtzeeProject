@@ -36,7 +36,8 @@ public class LogicCoverageTest {
 	private final int SM_STRAIGHT_ROW_Y = 246;
 	private final int LG_STRAIGHT_HOUSE_ROW_Y = 260;
 	private final int YAHTZEE_ROW_Y = 276;
-	private final int CHANCE_ROW_Y = 293;
+	private final int YAHTZEE_ROW_BONUS_Y = 293;
+	private final int CHANCE_ROW_Y = 310;
 	
 	@Before
 	public void doBefore() {
