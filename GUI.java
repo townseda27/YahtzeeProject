@@ -1,16 +1,13 @@
 package YahtzeeProject;
 
 import java.awt.EventQueue;
-import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -19,9 +16,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 
 public class GUI {
 
@@ -104,8 +103,17 @@ public class GUI {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				try {
+					//This portion of code changes the theme 
+					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
+		
 	}
 
 	/**
@@ -148,16 +156,19 @@ public class GUI {
 
 		frmYahtzeegui = new JFrame();
 		frmYahtzeegui.setResizable(false);
-		frmYahtzeegui.setTitle("YahtzeeGUI");
-		frmYahtzeegui.setBounds(100, 100, 769, 444);
+		frmYahtzeegui.setTitle("Yahtzee");
+		frmYahtzeegui.setBounds(100, 100, 800, 500);
 		frmYahtzeegui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
 		gameBoard = new JPanel();
+		gameBoard.setBackground(Color.DARK_GRAY);
 		frmYahtzeegui.getContentPane().add(gameBoard, BorderLayout.CENTER);
 		
 		rollBtn = new JButton("Roll Dice");
-		rollBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rollBtn.setForeground(Color.WHITE);
+		rollBtn.setBackground(Color.GRAY);
+		rollBtn.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
 		rollBtn.setBounds(183, 49, 113, 46);
 		rollBtn.setFocusable(false);
 		rollBtn.addActionListener(new ActionListener() {
@@ -184,40 +195,54 @@ public class GUI {
 		gameBoard.setLayout(null);
 		
 		dice1 = new JTextPane();
+		dice1.setBackground(Color.GRAY);
+		dice1.setForeground(Color.WHITE);
 		dice1.setEditable(false);
 		dice1.setBounds(183, 132, 38, 20);
 		gameBoard.add(dice1);
 		gameBoard.add(rollBtn);
 		
 		dice2 = new JTextPane();
+		dice2.setForeground(Color.WHITE);
+		dice2.setBackground(Color.GRAY);
 		dice2.setEditable(false);
 		dice2.setBounds(183, 163, 38, 20);
 		gameBoard.add(dice2);
 		
 		dice3 = new JTextPane();
+		dice3.setForeground(Color.WHITE);
+		dice3.setBackground(Color.GRAY);
 		dice3.setEditable(false);
 		dice3.setBounds(183, 194, 38, 20);
 		gameBoard.add(dice3);
 		
 		dice4 = new JTextPane();
+		dice4.setForeground(Color.WHITE);
+		dice4.setBackground(Color.GRAY);
 		dice4.setEditable(false);
 		dice4.setBounds(183, 225, 38, 20);
 		gameBoard.add(dice4);
 		
 		dice5 = new JTextPane();
+		dice5.setForeground(Color.WHITE);
+		dice5.setBackground(Color.GRAY);
 		dice5.setEditable(false);
 		dice5.setBounds(183, 256, 38, 20);
 		gameBoard.add(dice5);
 		
 		dice1LockBtn = new JToggleButton("Lock");
+		dice1LockBtn.setForeground(Color.WHITE);
+		dice1LockBtn.setBackground(Color.GRAY);
 		dice1LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice1Lock) {
 					dice1Lock = true;
 					dice1LockBtn.setText("Unlock");
+					dice1LockBtn.setForeground(Color.BLACK);
 				} else {
 					dice1Lock = false;
 					dice1LockBtn.setText("Lock");
+					dice1LockBtn.setForeground(Color.WHITE);
 				}
 				gameBoard.revalidate();
 				gameBoard.repaint();
@@ -228,14 +253,18 @@ public class GUI {
 		gameBoard.add(dice1LockBtn);
 		
 		dice2LockBtn = new JToggleButton("Lock");
+		dice2LockBtn.setForeground(Color.WHITE);
+		dice2LockBtn.setBackground(Color.GRAY);
 		dice2LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice2Lock) {
 					dice2Lock = true;
 					dice2LockBtn.setText("Unlock");
+					dice2LockBtn.setForeground(Color.BLACK);
 				} else {
 					dice2Lock = false;
 					dice2LockBtn.setText("Lock");
+					dice2LockBtn.setForeground(Color.WHITE);
 				}
 				gameBoard.revalidate();
 				gameBoard.repaint();
@@ -246,14 +275,18 @@ public class GUI {
 		gameBoard.add(dice2LockBtn);
 		
 		dice3LockBtn = new JToggleButton("Lock");
+		dice3LockBtn.setForeground(Color.WHITE);
+		dice3LockBtn.setBackground(Color.GRAY);
 		dice3LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice3Lock) {
 					dice3Lock = true;
 					dice3LockBtn.setText("Unlock");
+					dice3LockBtn.setForeground(Color.BLACK);
 				} else {
 					dice3Lock = false;
 					dice3LockBtn.setText("Lock");
+					dice3LockBtn.setForeground(Color.WHITE);
 				}
 				gameBoard.revalidate();
 				gameBoard.repaint();
@@ -264,14 +297,18 @@ public class GUI {
 		gameBoard.add(dice3LockBtn);
 		
 		dice4LockBtn = new JToggleButton("Lock");
+		dice4LockBtn.setForeground(Color.WHITE);
+		dice4LockBtn.setBackground(Color.GRAY);
 		dice4LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice4Lock) {
 					dice4Lock = true;
 					dice4LockBtn.setText("Unlock");
+					dice4LockBtn.setForeground(Color.BLACK);
 				} else {
 					dice4Lock = false;
 					dice4LockBtn.setText("Lock");
+					dice4LockBtn.setForeground(Color.WHITE);
 				}
 				gameBoard.revalidate();
 				gameBoard.repaint();
@@ -282,14 +319,18 @@ public class GUI {
 		gameBoard.add(dice4LockBtn);
 		
 		dice5LockBtn = new JToggleButton("Lock");
+		dice5LockBtn.setForeground(Color.WHITE);
+		dice5LockBtn.setBackground(Color.GRAY);
 		dice5LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!dice5Lock) {
 					dice5Lock = true;
 					dice5LockBtn.setText("Unlock");
+					dice5LockBtn.setForeground(Color.BLACK);
 				} else {
 					dice5Lock = false;
 					dice5LockBtn.setText("Lock");
+					dice5LockBtn.setForeground(Color.WHITE);
 				}
 				gameBoard.revalidate();
 				gameBoard.repaint();
@@ -302,7 +343,8 @@ public class GUI {
 		
 		//JTable doesn't work with absolute layout, so maybe put JTable within panel that can't move in frame?
 		scoreTable = new JTable(typeScores, columnNames);
-		scoreTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		scoreTable.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		scoreTable.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		scoreTable.setModel(new DefaultTableModel(
 			new Object[][] {
 				{"Category", "Score", "Used?"},
@@ -341,16 +383,20 @@ public class GUI {
 		scoreTable.setFocusable(false);
 		
 		turnsLabel = new JLabel("Turn 1/13");
-		turnsLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		turnsLabel.setBounds(28, 145, 107, 28);
+		turnsLabel.setForeground(Color.WHITE);
+		turnsLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+		turnsLabel.setBounds(437, 396, 131, 28);
 		gameBoard.add(turnsLabel);
 		
 		rollLabel = new JLabel("Roll 1/3");
-		rollLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		rollLabel.setBounds(28, 194, 107, 28);
+		rollLabel.setForeground(Color.WHITE);
+		rollLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+		rollLabel.setBounds(607, 396, 107, 28);
 		gameBoard.add(rollLabel);
 		
 		playAgainBtn = new JButton("Play again?");
+		playAgainBtn.setForeground(Color.WHITE);
+		playAgainBtn.setBackground(Color.GRAY);
 		playAgainBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearDiceValues();
@@ -375,8 +421,8 @@ public class GUI {
 				rollBtn.setEnabled(true);
 			}
 		});
-		playAgainBtn.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		playAgainBtn.setBounds(314, 333, 113, 46);
+		playAgainBtn.setFont(new Font("Comic Sans MS", Font.PLAIN, 14));
+		playAgainBtn.setBounds(183, 323, 113, 46);
 		playAgainBtn.setVisible(false);
 		gameBoard.add(playAgainBtn);
 		
@@ -492,4 +538,5 @@ public class GUI {
     	clearLocks();
     	clearDiceValues();
 	}
+	
 }
