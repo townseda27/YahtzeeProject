@@ -34,7 +34,7 @@ public class LogicCoverageTest {
 	private final int FOUR_OF_KIND_ROW_Y = 216;
 	private final int FULL_HOUSE_ROW_Y = 229;
 	private final int SM_STRAIGHT_ROW_Y = 246;
-	private final int LG_STRAIGHT_HOUSE_ROW_Y = 260;
+	private final int LG_STRAIGHT_ROW_Y = 260;
 	private final int YAHTZEE_ROW_Y = 276;
 	private final int YAHTZEE_ROW_BONUS_Y = 293;
 	private final int CHANCE_ROW_Y = 310;
@@ -471,7 +471,7 @@ public class LogicCoverageTest {
 		// roll is not a 3 of a kind and roll is not a 2 of a kind
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
 		int[] neitherRoll = {1, 2, 3, 4, 5};
-		ScorePad.update(threeOfKindRoll);
+		ScorePad.update(neitherRoll);
 		GUI.handleRowClick(event);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 0);
 	}
@@ -548,4 +548,58 @@ public class LogicCoverageTest {
 		assertEquals(GUI.scoreTable.getValueAt(GUI.SMALL_STRAIGHT_ROW, 1), 0);
 	}
 	
+	@Test
+	public void testScoreLargeStraightA() {
+		// small straight row is used
+		int roll[] = {1, 3, 4, 2, 5};
+		ScorePad.update(roll);
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 40);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 40);
+		
+		doAfter();
+		doBefore();
+		
+		// small straight row is not used
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), null);
+		ScorePad.update(roll);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 40);
+	}
+	
+	@Test
+	public void testScoreLargeStraightB() {
+		int[] largeStraight1 = {1, 2, 3, 4, 5};
+		int[] largeStraight2 = {2, 3, 4, 5, 6};
+		int[] notLargeStraight = {1, 1, 1, 1, 1};
+		
+		ScorePad.update(largeStraight1);
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 40);
+		
+		doAfter();
+		doBefore();
+		
+		ScorePad.update(largeStraight2);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 40);
+		
+		doAfter();
+		doBefore();
+		
+		ScorePad.update(notLargeStraight);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 0);
+		
+		ScorePad.update(largeStraight1);
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
+	}
 }

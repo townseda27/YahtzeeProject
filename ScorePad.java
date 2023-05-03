@@ -44,7 +44,7 @@ public class ScorePad {
 			scoreFullHouse(roll);
 			scoreSmallStraight(roll);
 			scoreLargeStraight(roll);
-			scoreYahtzeeNew(roll);
+			scoreYahtzee(roll);
 			scoreChance(roll);
 		}
 	}
@@ -201,29 +201,6 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreYahtzee(int[] roll) {
-		// branch off into new git branch
-		// try: adding yahtzee bonus row, change usedCategories too
-		// situation: if user chooses to score a yahtzee but does not roll
-		// a yahtzee, what do we do?
-		if(!isAtLeastXOfKind(roll, 5)) {
-			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) == null) {
-				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_ROW, 1);
-			} else {
-				GUI.scoreTable.setValueAt((int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1), GUI.YAHTZEE_ROW, 1);
-			}
-			
-			return;
-		}
-		
-		if(isFirstYahtzee == true) {
-			isFirstYahtzee = false;
-			GUI.scoreTable.setValueAt(YAHTZEE_SCORE, GUI.YAHTZEE_ROW, 1);
-		} else {
-			GUI.scoreTable.setValueAt((int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) + YAHTZEE_BONUS, GUI.YAHTZEE_ROW, 1);
-		}
-	}
-	
-	private static void scoreYahtzeeNew(int[] roll) {
 		if(GUI.currTurn > 13) {
 			System.out.println("got here");
 		}
