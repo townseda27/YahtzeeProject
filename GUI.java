@@ -508,12 +508,13 @@ public class GUI {
 		
 		scoreTable.setValueAt(sumUpper, UPPER_TOTAL_ROW, 1);
 		scoreTable.setValueAt(sumLower(), TOTAL_LOWER_ROW, 1);
+		System.out.println("total: " + (sumUpper + sumLower()) + " grand total row: " + GRAND_TOTAL_ROW);
 		scoreTable.setValueAt(sumUpper + sumLower(), GRAND_TOTAL_ROW, 1);
 		
 		playAgainBtn.setVisible(true);
 	}
 	
-	private static int sumUpper() {
+	public static int sumUpper() {
 		int score = 0;
 		for(int row : validUpperRows) {
 			if(scoreTable.getValueAt(row, 2) == null) {
@@ -526,7 +527,7 @@ public class GUI {
 		return score;
 	}
 	
-	private static int sumLower() {
+	public static int sumLower() {
 		int score = 0;
 		for(int row : validLowerRows) {
 			if(scoreTable.getValueAt(row, 2) == null) {
@@ -539,7 +540,7 @@ public class GUI {
 		return score;
 	}
 	
-	private static void clearScoreTable() {
+	public static void clearScoreTable() {
 		for(int row = 2; row <= GRAND_TOTAL_ROW; row++) {
 			scoreTable.setValueAt(null, row, 1);
 			scoreTable.setValueAt(null, row, 2);

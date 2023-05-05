@@ -47,6 +47,13 @@ public class Dice {
 		if (e) {
 			dice[4] = 1 + (int) (Math.random() * 6);
 		}
+		
+		// ===== temporary
+		if(GUI.currTurn % 2 == 0) {
+			for(int i = 0; i < 5; i++)
+				dice[i] = 1;
+		}
+		// =====
 	}
 
 	// method used to test the class by printing the dice array

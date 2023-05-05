@@ -201,10 +201,6 @@ public class ScorePad {
 	 * the dice rolled.
 	 */
 	private static void scoreYahtzee(int[] roll) {
-		if(GUI.currTurn > 13) {
-			System.out.println("got here");
-		}
-		
 		if(isFirstYahtzee) {
 			if(!GUI.isUsedRow(GUI.YAHTZEE_ROW)) {
 				if(isXOfKind(roll, 5)) {
@@ -216,9 +212,9 @@ public class ScorePad {
 				}
 			}
 		} else {
-			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1) == null) {
-				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_BONUS_ROW, 1);
-			}
+//			if(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1) == null) {
+//				GUI.scoreTable.setValueAt(0, GUI.YAHTZEE_BONUS_ROW, 1);
+//			}
 						
 			if(isXOfKind(roll, 5) && (int) GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1) != 0) {
 				// not used and rolled yahtzee
@@ -252,7 +248,7 @@ public class ScorePad {
 	 * @param roll the integer array to search through.
 	 * @return the total of all the occurrences of {@code x} in {@code roll}
 	 */
-	private static int totalOf(int x, int[] roll) {
+	public static int totalOf(int x, int[] roll) {
 		int score = 0;
 		
 		for (int num : roll) {
@@ -270,9 +266,7 @@ public class ScorePad {
 	 * @param roll an integer array to sum over
 	 * @return the sum of all elements in the array, or 0 if the array is null or empty
 	 */
-	private static int sum(int[] roll) {
-		if(roll == null || roll.length == 0) return 0;
-		
+	public static int sum(int[] roll) {		
 		int sum = 0;
 		for(int num : roll) {
 			sum += num;
@@ -321,7 +315,7 @@ public class ScorePad {
 	 * @param x an integer representing how many of a kind to search for
 	 * @return a boolean value representing if roll is at least X of a Kind (true) or not (false)
 	 */
-	private static boolean isAtLeastXOfKind(int[] roll, int x) {
+	public static boolean isAtLeastXOfKind(int[] roll, int x) {
 		if(x < 2) {
 			return false;
 		}
@@ -365,7 +359,7 @@ public class ScorePad {
 	 * @param arr2 an integer array
 	 * @return a boolean representing if arr1 and arr2 are the same
 	 */
-	private static boolean equals(int[] arr1, int[] arr2) {
+	public static boolean equals(int[] arr1, int[] arr2) {
 		if(arr1.length != arr2.length) return false;
 		
 		for(int i = 0; i < arr1.length; i++) {
