@@ -83,7 +83,7 @@ public class GUI {
 	public static JToggleButton dice4LockBtn;
 	public static JToggleButton dice5LockBtn;
 	public static JButton playAgainBtn;
-	private JPanel gameBoard;
+	public static JPanel gameBoard;
 	public static boolean gameOver = false;
 	public static int yahtzeeBonusScore = 0;
 	
@@ -95,24 +95,7 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					d = new Dice();
-					usedCategories = new int[TURNS];
-					currTurn = 1;
-					currRoll = 1;
-					GUI window = new GUI();
-					d.reroll(true, true, true, true, true);
-		    		int[] vals = d.getDiceValues();
-		    		dice1.setText((Integer.toString(vals[0])));
-		    		dice2.setText((Integer.toString(vals[1])));
-		    		dice3.setText((Integer.toString(vals[2])));
-		    		dice4.setText((Integer.toString(vals[3])));
-		    		dice5.setText((Integer.toString(vals[4])));
-					frmYahtzeegui.setVisible(true);
-					for(int i = ACES_ROW; i <= GRAND_TOTAL_ROW; i++) {
-						scoreTable.setValueAt("", i, 2);
-					}
-					ScorePad.update(vals);
-					frmYahtzeegui.repaint();
+					GUI.runGUI();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -127,6 +110,27 @@ public class GUI {
 			}
 		});
 		
+	}
+	
+	public static void runGUI() {
+		GUI window = new GUI();
+		d = new Dice();
+		usedCategories = new int[TURNS];
+		currTurn = 1;
+		currRoll = 1;
+		d.reroll(true, true, true, true, true);
+		int[] vals = d.getDiceValues();
+		dice1.setText((Integer.toString(vals[0])));
+		dice2.setText((Integer.toString(vals[1])));
+		dice3.setText((Integer.toString(vals[2])));
+		dice4.setText((Integer.toString(vals[3])));
+		dice5.setText((Integer.toString(vals[4])));
+		frmYahtzeegui.setVisible(true);
+		for(int i = ACES_ROW; i <= GRAND_TOTAL_ROW; i++) {
+			scoreTable.setValueAt("", i, 2);
+		}
+		ScorePad.update(vals);
+		frmYahtzeegui.repaint();
 	}
 
 	/**
@@ -187,23 +191,7 @@ public class GUI {
 		rollBtn.setFocusable(false);
 		rollBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-		    	
-	    		d.reroll(!dice1Lock, !dice2Lock, !dice3Lock, !dice4Lock, !dice5Lock);
-	    		int[] vals = d.getDiceValues();
-	    		dice1.setText((Integer.toString(vals[0])));
-	    		dice2.setText((Integer.toString(vals[1])));
-	    		dice3.setText((Integer.toString(vals[2])));
-	    		dice4.setText((Integer.toString(vals[3])));
-	    		dice5.setText((Integer.toString(vals[4])));
-	    		
-	    		ScorePad.update(vals);
-	    		frmYahtzeegui.repaint();
-		    	
-		    	rollLabel.setText("Roll " + ++currRoll + "/" + ROLLS);
-		    	
-		    	if(currRoll > 2) {
-		    		rollBtn.setEnabled(false);
-		    	}
+	    		rollBtnHandleClick();
 			}
 		});
 		gameBoard.setLayout(null);
@@ -249,17 +237,7 @@ public class GUI {
 		dice1LockBtn.setBackground(Color.GRAY);
 		dice1LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!dice1Lock) {
-					dice1Lock = true;
-					dice1LockBtn.setText("Unlock");
-					dice1LockBtn.setForeground(Color.BLACK);
-				} else {
-					dice1Lock = false;
-					dice1LockBtn.setText("Lock");
-					dice1LockBtn.setForeground(Color.WHITE);
-				}
-				gameBoard.revalidate();
-				gameBoard.repaint();
+				handleDice1LockBtnClick();
 			}
 		});
 		dice1LockBtn.setBounds(230, 132, 75, 20);
@@ -271,17 +249,7 @@ public class GUI {
 		dice2LockBtn.setBackground(Color.GRAY);
 		dice2LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!dice2Lock) {
-					dice2Lock = true;
-					dice2LockBtn.setText("Unlock");
-					dice2LockBtn.setForeground(Color.BLACK);
-				} else {
-					dice2Lock = false;
-					dice2LockBtn.setText("Lock");
-					dice2LockBtn.setForeground(Color.WHITE);
-				}
-				gameBoard.revalidate();
-				gameBoard.repaint();
+				handleDice2LockBtnClick();
 			}
 		});
 		dice2LockBtn.setBounds(230, 163, 75, 20);
@@ -293,17 +261,7 @@ public class GUI {
 		dice3LockBtn.setBackground(Color.GRAY);
 		dice3LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!dice3Lock) {
-					dice3Lock = true;
-					dice3LockBtn.setText("Unlock");
-					dice3LockBtn.setForeground(Color.BLACK);
-				} else {
-					dice3Lock = false;
-					dice3LockBtn.setText("Lock");
-					dice3LockBtn.setForeground(Color.WHITE);
-				}
-				gameBoard.revalidate();
-				gameBoard.repaint();
+				handleDice3LockBtnClick();
 			}
 		});
 		dice3LockBtn.setBounds(230, 194, 75, 20);
@@ -315,17 +273,7 @@ public class GUI {
 		dice4LockBtn.setBackground(Color.GRAY);
 		dice4LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!dice4Lock) {
-					dice4Lock = true;
-					dice4LockBtn.setText("Unlock");
-					dice4LockBtn.setForeground(Color.BLACK);
-				} else {
-					dice4Lock = false;
-					dice4LockBtn.setText("Lock");
-					dice4LockBtn.setForeground(Color.WHITE);
-				}
-				gameBoard.revalidate();
-				gameBoard.repaint();
+				handleDice4LockBtnClick();
 			}
 		});
 		dice4LockBtn.setBounds(230, 225, 75, 20);
@@ -337,17 +285,7 @@ public class GUI {
 		dice5LockBtn.setBackground(Color.GRAY);
 		dice5LockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!dice5Lock) {
-					dice5Lock = true;
-					dice5LockBtn.setText("Unlock");
-					dice5LockBtn.setForeground(Color.BLACK);
-				} else {
-					dice5Lock = false;
-					dice5LockBtn.setText("Lock");
-					dice5LockBtn.setForeground(Color.WHITE);
-				}
-				gameBoard.revalidate();
-				gameBoard.repaint();
+				handleDice5LockBtnClick();
 			}
 		});
 		dice5LockBtn.setBounds(230, 256, 75, 20);
@@ -454,6 +392,96 @@ public class GUI {
 		});
 	}
 	
+	public static void rollBtnHandleClick() {
+		d.reroll(!dice1Lock, !dice2Lock, !dice3Lock, !dice4Lock, !dice5Lock);
+		int[] vals = d.getDiceValues();
+		dice1.setText((Integer.toString(vals[0])));
+		dice2.setText((Integer.toString(vals[1])));
+		dice3.setText((Integer.toString(vals[2])));
+		dice4.setText((Integer.toString(vals[3])));
+		dice5.setText((Integer.toString(vals[4])));
+		
+		ScorePad.update(vals);
+		frmYahtzeegui.repaint();
+    	
+    	rollLabel.setText("Roll " + ++currRoll + "/" + ROLLS);
+    	
+    	if(currRoll > 2) {
+    		rollBtn.setEnabled(false);
+    	}
+	}
+	
+	public static void handleDice1LockBtnClick() {
+		if (!dice1Lock) {
+			dice1Lock = true;
+			dice1LockBtn.setText("Unlock");
+			dice1LockBtn.setForeground(Color.BLACK);
+		} else {
+			dice1Lock = false;
+			dice1LockBtn.setText("Lock");
+			dice1LockBtn.setForeground(Color.WHITE);
+		}
+		gameBoard.revalidate();
+		gameBoard.repaint();
+	}
+	
+	public static void handleDice2LockBtnClick() {
+		if (!dice2Lock) {
+			dice2Lock = true;
+			dice2LockBtn.setText("Unlock");
+			dice2LockBtn.setForeground(Color.BLACK);
+		} else {
+			dice2Lock = false;
+			dice2LockBtn.setText("Lock");
+			dice2LockBtn.setForeground(Color.WHITE);
+		}
+		gameBoard.revalidate();
+		gameBoard.repaint();
+	}
+	
+	public static void handleDice3LockBtnClick() {
+		if (!dice3Lock) {
+			dice3Lock = true;
+			dice3LockBtn.setText("Unlock");
+			dice3LockBtn.setForeground(Color.BLACK);
+		} else {
+			dice3Lock = false;
+			dice3LockBtn.setText("Lock");
+			dice3LockBtn.setForeground(Color.WHITE);
+		}
+		gameBoard.revalidate();
+		gameBoard.repaint();
+	}
+	
+	public static void handleDice4LockBtnClick() {
+		if (!dice4Lock) {
+			dice4Lock = true;
+			dice4LockBtn.setText("Unlock");
+			dice4LockBtn.setForeground(Color.BLACK);
+		} else {
+			dice4Lock = false;
+			dice4LockBtn.setText("Lock");
+			dice4LockBtn.setForeground(Color.WHITE);
+		}
+		gameBoard.revalidate();
+		gameBoard.repaint();
+	}
+	
+	public static void handleDice5LockBtnClick() {
+		if (!dice5Lock) {
+			dice5Lock = true;
+			dice5LockBtn.setText("Unlock");
+			dice5LockBtn.setForeground(Color.BLACK);
+		} else {
+			dice5Lock = false;
+			dice5LockBtn.setText("Lock");
+			dice5LockBtn.setForeground(Color.WHITE);
+		}
+		gameBoard.revalidate();
+		gameBoard.repaint();
+	}
+	
+	
 	private static void clearLocks() {
 		dice1Lock = false;
 		dice1LockBtn.setText("Lock");
@@ -508,7 +536,6 @@ public class GUI {
 		
 		scoreTable.setValueAt(sumUpper, UPPER_TOTAL_ROW, 1);
 		scoreTable.setValueAt(sumLower(), TOTAL_LOWER_ROW, 1);
-		System.out.println("total: " + (sumUpper + sumLower()) + " grand total row: " + GRAND_TOTAL_ROW);
 		scoreTable.setValueAt(sumUpper + sumLower(), GRAND_TOTAL_ROW, 1);
 		
 		playAgainBtn.setVisible(true);
@@ -605,6 +632,26 @@ public class GUI {
     	
     	clearLocks();
     	clearDiceValues();
+	}
+
+	public static boolean isDice1Lock() {
+		return dice1Lock;
+	}
+
+	public static boolean isDice2Lock() {
+		return dice2Lock;
+	}
+
+	public static boolean isDice3Lock() {
+		return dice3Lock;
+	}
+
+	public static boolean isDice4Lock() {
+		return dice4Lock;
+	}
+
+	public static boolean isDice5Lock() {
+		return dice5Lock;
 	}
 	
 }

@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.awt.Font;
 import java.awt.event.MouseListener;
@@ -13,6 +14,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
@@ -121,6 +123,9 @@ public class LogicCoverageTest {
 		GUI.dice5 = new JTextPane();
 		GUI.d = new Dice();
 		GUI.yahtzeeBonusScore = 0;
+		GUI.currRoll = 1;
+		GUI.currTurn = 1;
+		GUI.gameBoard = new JPanel();
 	}
 	
 	@After
@@ -146,6 +151,7 @@ public class LogicCoverageTest {
 		GUI.currTurn = 1;
 		GUI.currRoll = 1;
 		GUI.yahtzeeBonusScore = 0;
+		GUI.gameBoard = null;
 	}
 	
 	@Test
@@ -935,5 +941,48 @@ public class LogicCoverageTest {
 		
 		assertEquals(ScorePad.equals(arr1, arr2), true);
 		assertEquals(ScorePad.equals(arr2, arr3), false);
+	}
+	
+	@Test
+	public void testRunGUI() {
+		GUI.runGUI();
+		// when i is less than or equal to GRAND_TOTAL_ROW,
+		// an empty string gets set to the row of i at column 2
+		assertEquals(GUI.scoreTable.getValueAt(3, 2), "");
+		
+		// if i > GRAND_TOTAL_ROW, there is no element at row i
+		try {
+			GUI.scoreTable.getValueAt(23, 2);
+			fail();
+		} catch(Exception e) {}	
+	}
+	
+	@Test
+	public void testRollBtn() {
+		// first roll is always done automatically
+		GUI.currRoll = 1; // when predicate 42 is reached, currRoll is 2 (= 2)
+		// rollBtnHandleClick() increments the row, then predicate 42 is reached
+		GUI.rollBtnHandleClick();
+		assertEquals(GUI.rollBtn.isEnabled(), true);
+		
+		doAfter();
+		doBefore();
+		
+		GUI.currRoll = 0; // when predicate 42 is reached, currRoll is 1 (< 2)
+		GUI.rollBtnHandleClick();
+		assertEquals(GUI.rollBtn.isEnabled(), true);
+		
+		doAfter();
+		doBefore();
+		
+		GUI.currRoll = 3; // when predicate 42 is reached, currRoll is 3 (> 2)
+		GUI.rollBtnHandleClick();
+		assertEquals(GUI.rollBtn.isEnabled(), false);
+	}
+	
+	@Test
+	public void testLock1() {
+		GUI.handleDice1LockBtnClick();
+		assertEquals(GUI.isDice1Lock(), true);
 	}
 }
