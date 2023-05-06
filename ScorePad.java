@@ -32,6 +32,9 @@ public class ScorePad {
 		if(GUI.currTurn > 13) {
 			return;
 		}
+		
+		checkDice(roll);
+		
 		if(roll != null && roll.length == 5) {
 			GUI.dice1.setText("" + roll[0]);
 			GUI.dice2.setText("" + roll[1]);
@@ -266,7 +269,7 @@ public class ScorePad {
 	 * @param roll an integer array to sum over
 	 * @return the sum of all elements in the array, or 0 if the array is null or empty
 	 */
-	public static int sum(int[] roll) {		
+	public static int sum(int[] roll) {	
 		int sum = 0;
 		for(int num : roll) {
 			sum += num;
@@ -368,4 +371,13 @@ public class ScorePad {
 		
 		return true;
 	}
+	
+	private static void checkDice(int roll[]) {
+		for (int i : roll) {
+			if (roll[i] <1 || roll[i] >6) {
+				throw new IllegalArgumentException();
+			}
+		}
+	}
+	
 }
