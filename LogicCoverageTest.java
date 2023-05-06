@@ -70,6 +70,7 @@ public class LogicCoverageTest {
 				{"Sm. Straight", 0, ""},
 				{"Lg. Straight", 0, ""},
 				{"Yahtzee", 0, ""},
+				{"Yahtzee Bonus", 0, ""},
 				{"Chance", 0, ""},
 				{"Total Lower", 0, ""},
 				{"", "", ""},
@@ -79,34 +80,35 @@ public class LogicCoverageTest {
 		GUI.scoreTable = new JTable(typeScores, columnNames);
 		GUI.scoreTable.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GUI.scoreTable.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Category", "Score", "Used?"},
-				{"Upper Section", "", ""},
-				{"Aces", null, ""},
-				{"Twos", null, ""},
-				{"Threes", null, ""},
-				{"Fours", null, ""},
-				{"Fives", null, ""},
-				{"Sixes", null, ""},
-				{"Upper Bonus", null, ""},
-				{"Upper Total", null, ""},
-				{"", "", ""},
-				{"Lower Section", "", ""},
-				{"3 of a kind", null, ""},
-				{"4 of a kind", null, ""},
-				{"Full House", null, ""},
-				{"Sm. Straight", null, ""},
-				{"Lg. Straight", null, ""},
-				{"Yahtzee", null, ""},
-				{"Chance", null, ""},
-				{"Total Lower", null, ""},
-				{"", null, ""},
-				{"Grand Total", null, ""},
-			},
-			new String[] {
-				"Type", "Score", "Used"
-			}
-		));
+				new Object[][] {
+					{"Category", "Score", "Used?"},
+					{"Upper Section", "", ""},
+					{"Aces", null, ""},
+					{"Twos", null, ""},
+					{"Threes", null, ""},
+					{"Fours", null, ""},
+					{"Fives", null, ""},
+					{"Sixes", null, ""},
+					{"Upper Bonus", null, ""},
+					{"Upper Total", null, ""},
+					{"", "", ""},
+					{"Lower Section", "", ""},
+					{"3 of a kind", null, ""},
+					{"4 of a kind", null, ""},
+					{"Full House", null, ""},
+					{"Sm. Straight", null, ""},
+					{"Lg. Straight", null, ""},
+					{"Yahtzee", null, ""},
+					{"Yahtzee Bonus", null, ""},
+					{"Chance", null, ""},
+					{"Total Lower", null, ""},
+					{"", null, ""},
+					{"Grand Total", null, ""},
+				},
+				new String[] {
+					"Type", "Score", "Used"
+				}
+			));
 		GUI.usedCategories = new int[GUI.TURNS];
 		GUI.turnsLabel = new JLabel("Turn 1/13");
 		GUI.rollLabel = new JLabel("Roll 1/3");
@@ -116,6 +118,7 @@ public class LogicCoverageTest {
 		GUI.dice3LockBtn = new JToggleButton("Lock");
 		GUI.dice4LockBtn = new JToggleButton("Lock");
 		GUI.dice5LockBtn = new JToggleButton("Lock");
+		GUI.playAgainBtn = new JButton();
 		GUI.dice1 = new JTextPane();
 		GUI.dice2 = new JTextPane();
 		GUI.dice3 = new JTextPane();
@@ -126,6 +129,7 @@ public class LogicCoverageTest {
 		GUI.currRoll = 1;
 		GUI.currTurn = 1;
 		GUI.gameBoard = new JPanel();
+		GUI.gameOver = false;
 	}
 	
 	@After
@@ -152,6 +156,8 @@ public class LogicCoverageTest {
 		GUI.currRoll = 1;
 		GUI.yahtzeeBonusScore = 0;
 		GUI.gameBoard = null;
+		GUI.playAgainBtn = null;
+		GUI.gameOver = false;
 	}
 	
 	@Test
@@ -982,7 +988,363 @@ public class LogicCoverageTest {
 	
 	@Test
 	public void testLock1() {
+		// unlocked to start, so a click should lock it
 		GUI.handleDice1LockBtnClick();
 		assertEquals(GUI.isDice1Lock(), true);
+		
+		// another click should unlock it
+		GUI.handleDice1LockBtnClick();
+		assertEquals(GUI.isDice1Lock(), false);
+	}
+	
+	@Test
+	public void testLock2() {
+		// unlocked to start, so a click should lock it
+		GUI.handleDice2LockBtnClick();
+		assertEquals(GUI.isDice2Lock(), true);
+		
+		// another click should unlock it
+		GUI.handleDice2LockBtnClick();
+		assertEquals(GUI.isDice2Lock(), false);
+	}
+	
+	@Test
+	public void testLock3() {
+		// unlocked to start, so a click should lock it
+		GUI.handleDice3LockBtnClick();
+		assertEquals(GUI.isDice3Lock(), true);
+		
+		// another click should unlock it
+		GUI.handleDice3LockBtnClick();
+		assertEquals(GUI.isDice3Lock(), false);
+	}
+	
+	@Test
+	public void testLock4() {
+		// unlocked to start, so a click should lock it
+		GUI.handleDice4LockBtnClick();
+		assertEquals(GUI.isDice4Lock(), true);
+		
+		// another click should unlock it
+		GUI.handleDice4LockBtnClick();
+		assertEquals(GUI.isDice4Lock(), false);
+	}
+	
+	@Test
+	public void testLock5() {
+		// unlocked to start, so a click should lock it
+		GUI.handleDice5LockBtnClick();
+		assertEquals(GUI.isDice5Lock(), true);
+		
+		// another click should unlock it
+		GUI.handleDice5LockBtnClick();
+		assertEquals(GUI.isDice5Lock(), false);
+	}
+	
+	@Test
+	public void testHandleRowClickA() {
+		int[] roll = {1, 2, 3, 4, 5};
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		ScorePad.update(roll);
+		GUI.gameOver = true;
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 2), "");
+		
+		doAfter();
+		doBefore();
+		
+		ScorePad.update(roll);
+		GUI.gameOver = false;
+		GUI.handleRowClick(event);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.LARGE_STRAIGHT_ROW, 2), "X");
+	}
+	
+	@Test
+	public void testHandleRowClickB() {
+		int[] roll1 = {1, 2, 3, 4, 5};
+		int[] roll2 = {1, 1, 1, 2, 2};
+		MouseEvent validRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		MouseEvent invalidRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, 0, 0, 1, false);
+		ScorePad.update(roll1);
+		GUI.usedCategories[GUI.currTurn - 1] = GUI.ACES_ROW;
+		// valid row selection & used row
+		GUI.handleRowClick(validRowClick);
+		ScorePad.update(roll2);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 1);
+		
+		doAfter();
+		doBefore();
+		
+		// valid row selection and row is not used
+		assertEquals(GUI.isUsedRow(GUI.ACES_ROW), false);
+		ScorePad.update(roll1);
+		GUI.handleRowClick(validRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 1);
+		assertEquals(GUI.isUsedRow(GUI.ACES_ROW), true);
+		
+		doAfter();
+		doBefore();
+		
+		// invalid row selection and row is not used
+		assertEquals(GUI.isUsedRow(GUI.ACES_ROW), false);
+		ScorePad.update(roll1);
+		GUI.handleRowClick(invalidRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 1);
+		assertEquals(GUI.isUsedRow(GUI.ACES_ROW), false);
+	}
+	
+	@Test
+	public void testHandleClickC() {
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent otherRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		int[] fiveOfKindRoll = {1, 1, 1, 1, 1};
+		int[] otherRoll = {1, 2, 3, 4, 5};
+		
+		// row is yahtzee bonus row, roll is 5 of kind
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.yahtzeeBonusScore, 100);
+		
+		doAfter();
+		doBefore();
+		
+		// row is yahtzee bonus row, roll is not 5 of kind
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+		
+		// row is not yahtzee bonus row, roll is not 5 of kind
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(otherRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 1);
+	}
+	
+	@Test
+	public void testHandleClickD() {
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent otherRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		int[] fiveOfKindRoll = {1, 1, 1, 1, 1};
+		
+		// row is yahtzee bonus row, yahtzee row has been used
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1), 100);
+		
+		doAfter();
+		doBefore();
+		
+		// row is yahtzee bonus row, yahtzee row has not been used
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1), null);
+		
+		doAfter();
+		doBefore();
+		
+		// row is not yahtzee bonus row, yahtzee row has not been used
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(otherRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 5);
+	}
+	
+	@Test
+	public void testHandleClickE() {
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent otherRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		int[] fiveOfKindRoll = {1, 1, 1, 1, 1};
+		int[] otherRoll = {1, 2, 3, 4, 5};
+
+		
+		// row is yahtzee bonus row, value at yahtzee bonus row is 0
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		int oldTurn = GUI.currTurn;
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1), 0);
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+		assertEquals(oldTurn, GUI.currTurn);
+		
+		doAfter();
+		doBefore();
+		
+		// row is yahtzee bonus row, value at yahtzee bonus row is not 0
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.yahtzeeBonusScore, 200);
+		
+		doAfter();
+		doBefore();
+		
+		// row is not the yahtzee bonus row, and the value of the row is 0
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(otherRoll);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 1), 0);
+		GUI.handleRowClick(otherRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 1);
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+	}
+	
+	@Test
+	public void testHandleClickF() {
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent otherRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
+		int[] fiveOfKindRoll = {1, 1, 1, 1, 1};
+		int[] otherRoll = {1, 2, 3, 4, 5};
+		
+		// row is yahtzee row, value at yahtzee row is 0
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 2), "X");
+		
+		doAfter();
+		doBefore();
+		
+		// row is yahtzee row, value at yahtzee row is not 0
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 2), "");
+		
+		doAfter();
+		doBefore();
+		
+		// row is not the yahtzee row, and the value of the row is 0
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(otherRowClick);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.SIXES_ROW, 1), 0);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_BONUS_ROW, 2), "");
+	}
+	
+	@Test
+	public void testHandleClickG() {
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent otherRowClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
+		int[] fiveOfKindRoll = {1, 1, 1, 1, 1};
+		
+		// row is yahtzee row
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		assertEquals(ScorePad.isFirstYahtzee, false);
+		
+		doAfter();
+		doBefore();
+		
+		// row is not yahtzee row
+		ScorePad.update(fiveOfKindRoll);
+		GUI.handleRowClick(otherRowClick);
+		assertEquals(ScorePad.isFirstYahtzee, true);
+	}
+	
+	@Test
+	public void testHandleClickH() {
+		// row clicked, current turn equal to 13
+		int[] roll = {1, 2, 3, 4, 5};
+		MouseEvent row = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		ScorePad.update(roll);
+		GUI.currTurn = 13;
+		GUI.handleRowClick(row);
+		assertEquals(GUI.gameOver, true);
+		
+		doAfter();
+		doBefore();
+		
+		// row clicked, current turn > 13
+		ScorePad.update(roll);
+		GUI.currTurn = 14;
+		GUI.handleRowClick(row);
+		assertEquals(GUI.gameOver, true);
+		
+		doAfter();
+		doBefore();
+		// row clicked, current turn < 13
+		ScorePad.update(roll);
+		GUI.currTurn = 12;
+		GUI.handleRowClick(row);
+		assertEquals(GUI.gameOver, false);
+		
+		doAfter();
+		doBefore();
+	}
+	
+	@Test
+	public void testHandleClickI() {
+		int[] otherRoll = {1, 1, 1, 2, 4};
+		int[] yahtzeeRoll = {1, 1, 1, 1, 1};
+		MouseEvent otherRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent yahtzeeRow = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+
+		// row is clicked and row is equal to yahtzee bonus row
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+		ScorePad.update(yahtzeeRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(yahtzeeRoll);
+		GUI.handleRowClick(yahtzeeBonusRow);
+		assertEquals(GUI.yahtzeeBonusScore, 100);
+		
+		doAfter();
+		doBefore();
+		// row is clicked and row is not equal to the yahtzee bonus row
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+		ScorePad.update(yahtzeeRoll);
+		GUI.handleRowClick(yahtzeeRow);
+		ScorePad.update(otherRoll);
+		GUI.handleRowClick(otherRow);
+		assertEquals(GUI.yahtzeeBonusScore, 0);
+	}
+	
+	@Test
+	public void testIsUsedRow() {
+		GUI.usedCategories[0] = GUI.THREES_ROW;
+		
+		assertEquals(GUI.isUsedRow(GUI.THREES_ROW), true);
+		assertEquals(GUI.isUsedRow(GUI.ACES_ROW), false);
+	}
+	
+	@Test
+	public void testEndGame() {
+		// sumUpper > 63
+		MouseEvent row = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		ScorePad.update(new int[] {1, 2, 3, 4, 5});
+		GUI.scoreTable.setValueAt(999, GUI.ACES_ROW, 1);
+		GUI.handleRowClick(row);
+		GUI.endGame();
+		assertEquals(GUI.scoreTable.getValueAt(GUI.UPPER_BONUS_ROW, 1), ScorePad.UPPER_BONUS_VALUE);
+		
+		doAfter();
+		doBefore();
+		
+		// sumUpper < 63
+		ScorePad.update(new int[] {1, 2, 3, 4, 5});
+		GUI.handleRowClick(row);
+		GUI.endGame();
+		assertEquals(GUI.scoreTable.getValueAt(GUI.UPPER_BONUS_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
+		
+		// sumUpper == 63
+		ScorePad.update(new int[] {1, 2, 3, 4, 5});
+		GUI.scoreTable.setValueAt(63, GUI.ACES_ROW, 1);
+		GUI.handleRowClick(row);
+		GUI.endGame();
+		assertEquals(GUI.scoreTable.getValueAt(GUI.UPPER_BONUS_ROW, 1), 0);
+		
+		doAfter();
+		doBefore();
 	}
 }

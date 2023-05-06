@@ -101,15 +101,13 @@ public class GUI {
 				}
 				
 				try {
-					//This portion of code changes the theme 
-					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-					
+					// changes the theme 
+					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");			
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		
 	}
 	
 	public static void runGUI() {
@@ -291,9 +289,7 @@ public class GUI {
 		dice5LockBtn.setBounds(230, 256, 75, 20);
 		dice5LockBtn.setFocusable(false);
 		gameBoard.add(dice5LockBtn);
-		//frmYahtzeegui.getContentPane().setLayout(null);
-		
-		//JTable doesn't work with absolute layout, so maybe put JTable within panel that can't move in frame?
+
 		scoreTable = new JTable(typeScores, columnNames);
 		scoreTable.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
 		scoreTable.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
@@ -385,9 +381,7 @@ public class GUI {
 		scoreTable.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
 		    public void mouseClicked(java.awt.event.MouseEvent event) {
-		    	if(!gameOver) {
-		    		handleRowClick(event);
-		    	}
+	    		handleRowClick(event);
 		    }
 		});
 	}
@@ -575,6 +569,7 @@ public class GUI {
 	}
 	
 	public static void handleRowClick(MouseEvent event) {
+		if(gameOver) return;
 		
 		int row = scoreTable.rowAtPoint(event.getPoint());
 		
