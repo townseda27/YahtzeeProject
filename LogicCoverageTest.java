@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 
 import java.awt.Font;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
@@ -161,7 +162,7 @@ public class LogicCoverageTest {
 	}
 	
 	@Test
-	public void testPredicate1() {
+	public void testUpdateA() {
 		// predicate is in the update method
 		
 		int[] nullRoll = null;
@@ -188,7 +189,7 @@ public class LogicCoverageTest {
 	}
 	
 	@Test
-	public void testUpdateA() {
+	public void testUpdateB() {
 		// turn is 13 or less
 		int[] roll = {1, 2, 3, 4, 5};
 		GUI.currTurn = 5;
@@ -207,8 +208,7 @@ public class LogicCoverageTest {
 	}
 	
 	@Test
-	public void testScoreUpper() {
-		
+	public void testScoreUpperA() {
 		// ----ACES ROW-----
 		// aces row is already used
 		int acesRoll[] = {1, 1, 3, 4, 6};
@@ -229,10 +229,10 @@ public class LogicCoverageTest {
 		MouseEvent acesEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
 		GUI.handleRowClick(acesEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.ACES_ROW, 1), 4);
-		
-		doAfter();
-		doBefore();
-		
+	}
+	
+	@Test
+	public void testScoreUpperB() {
 		// ----TWOS ROW----
 		// twos row is already used
 		int twosRoll[] = {2, 2, 3, 4, 6};
@@ -253,10 +253,10 @@ public class LogicCoverageTest {
 		MouseEvent twosEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, TWOS_ROW_Y, 1, false);
 		GUI.handleRowClick(twosEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.TWOS_ROW, 1), 8);
-		
-		doAfter();
-		doBefore();
-		
+	}
+	
+	@Test
+	public void testScoreUpperC() {
 		// ----THREES ROW----
 		// threes row is already used
 		int threesRoll[] = {2, 2, 3, 4, 6};
@@ -277,7 +277,10 @@ public class LogicCoverageTest {
 		MouseEvent threesEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREES_ROW_Y, 1, false);
 		GUI.handleRowClick(threesEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.THREES_ROW, 1), 12);
-		
+	}
+	
+	@Test
+	public void testScoreUpperD() {
 		// ----FOURS ROW----
 		// fours row is already used
 		int foursRoll[] = {2, 2, 3, 4, 6};
@@ -298,10 +301,10 @@ public class LogicCoverageTest {
 		MouseEvent foursEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOURS_ROW_Y, 1, false);
 		GUI.handleRowClick(foursEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FOURS_ROW, 1), 16);
-		
-		doAfter();
-		doBefore();
-		
+	}
+	
+	@Test
+	public void testScoreUpperE() {
 		// ----FIVES ROW----
 		// fives row is already used
 		int fivesRoll[] = {2, 2, 3, 5, 5};
@@ -322,10 +325,10 @@ public class LogicCoverageTest {
 		MouseEvent fivesEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FIVES_ROW_Y, 1, false);
 		GUI.handleRowClick(fivesEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FIVES_ROW, 1), 20);
-		
-		doAfter();
-		doBefore();
-		
+	}
+	
+	@Test
+	public void testScoreUpperF() {
 		// ----SIXES ROW----
 		// sixes row is already used
 		int sixesRoll[] = {2, 2, 3, 5, 6};
@@ -346,7 +349,6 @@ public class LogicCoverageTest {
 		MouseEvent sixesEvent2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
 		GUI.handleRowClick(sixesEvent2);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.SIXES_ROW, 1), 24);
-		
 	}
 
 	@Test
@@ -432,6 +434,7 @@ public class LogicCoverageTest {
 	@Test
 	public void testScoreXOfAKind() {
 		int[] roll4OfAKind = {1, 1, 1, 1, 2};
+		int[] rollNo4OfAKind = {1, 2, 3, 4, 5};
 		ScorePad.update(roll4OfAKind);
 		MouseEvent eventRow3 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
 		GUI.handleRowClick(eventRow3);
@@ -444,7 +447,6 @@ public class LogicCoverageTest {
 		doAfter();
 		doBefore();
 		
-		int[] rollNo4OfAKind = {1, 2, 3, 4, 5};
 		ScorePad.update(rollNo4OfAKind);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), 0);
 		ScorePad.update(rollNo4OfAKind);
@@ -1346,5 +1348,412 @@ public class LogicCoverageTest {
 		
 		doAfter();
 		doBefore();
+	}
+	
+	@Test
+	public void testSumUpperA() {
+		int roll[] = {2, 2, 4, 4, 5};
+		MouseEvent acesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		MouseEvent twosClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, TWOS_ROW_Y, 1, false);
+		MouseEvent threesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREES_ROW_Y, 1, false);
+		MouseEvent fourslick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOURS_ROW_Y, 1, false);
+		MouseEvent fivesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FIVES_ROW_Y, 1, false);
+		MouseEvent sixesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
+
+		ScorePad.update(roll);
+		GUI.handleRowClick(acesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(twosClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(threesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourslick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fivesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(sixesClick);
+		int expectedSum = 4 + 8 + 5;
+		assertEquals(GUI.sumUpper(), expectedSum);
+	}
+	
+	@Test
+	public void testSumUpperB() {
+		int roll[] = {2, 2, 4, 4, 5};
+		MouseEvent acesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		MouseEvent twosClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, TWOS_ROW_Y, 1, false);
+		MouseEvent threesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREES_ROW_Y, 1, false);
+		MouseEvent fourslick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOURS_ROW_Y, 1, false);
+		MouseEvent fivesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FIVES_ROW_Y, 1, false);
+		MouseEvent sixesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
+
+		// let twos row have a null value in column 2
+		ScorePad.update(roll);
+		GUI.handleRowClick(acesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(twosClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(threesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourslick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fivesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(sixesClick);
+		int expectedSum = 8 + 5;
+		GUI.scoreTable.setValueAt(null, GUI.TWOS_ROW, 2);
+		assertEquals(GUI.sumUpper(), expectedSum);
+		
+		doAfter();
+		doBefore();
+		
+		// let twos row not have a null value in column 2
+		ScorePad.update(roll);
+		GUI.handleRowClick(acesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(twosClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(threesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourslick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fivesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(sixesClick);
+		expectedSum = 4 + 8 + 5;
+		GUI.scoreTable.setValueAt("X", GUI.TWOS_ROW, 2);
+		assertEquals(GUI.sumUpper(), expectedSum);
+	}
+	
+	@Test
+	public void testSumUpperC() {
+		int roll[] = {2, 2, 4, 4, 5};
+		MouseEvent acesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, ACES_ROW_Y, 1, false);
+		MouseEvent twosClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, TWOS_ROW_Y, 1, false);
+		MouseEvent threesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREES_ROW_Y, 1, false);
+		MouseEvent fourslick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOURS_ROW_Y, 1, false);
+		MouseEvent fivesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FIVES_ROW_Y, 1, false);
+		MouseEvent sixesClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SIXES_ROW_Y, 1, false);
+
+		// let twos row have a X value in column 2
+		ScorePad.update(roll);
+		GUI.handleRowClick(acesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(twosClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(threesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourslick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fivesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(sixesClick);
+		int expectedSum = 4 + 8 + 5;
+		GUI.scoreTable.setValueAt("X", GUI.TWOS_ROW, 2);
+		assertEquals(GUI.sumUpper(), expectedSum);
+		
+		doAfter();
+		doBefore();
+		
+		
+		// let twos row not have a X value in column 2
+		ScorePad.update(roll);
+		GUI.handleRowClick(acesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(twosClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(threesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourslick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fivesClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(sixesClick);
+		expectedSum = 8 + 5;
+		GUI.scoreTable.setValueAt("Y", GUI.TWOS_ROW, 2);
+		assertEquals(GUI.sumUpper(), expectedSum);
+	}
+	
+	@Test
+	public void testSumLowerA() {
+		int roll[] = {2, 2, 3, 3, 3};
+		MouseEvent threeOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fourOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOUR_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fullHouseClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FULL_HOUSE_ROW_Y, 1, false);
+		MouseEvent smallStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SM_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent largeStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent yahtzeeClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent chanceClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, CHANCE_ROW_Y, 1, false);
+		
+		ScorePad.update(roll);
+		GUI.handleRowClick(threeOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fullHouseClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(smallStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(largeStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeBonusClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(chanceClick);
+		int expectedSum = ScorePad.sum(roll) + ScorePad.FULL_HOUSE_SCORE + ScorePad.sum(roll);
+		assertEquals(GUI.sumLower(), expectedSum);
+	}
+	
+	@Test
+	public void testSumLowerB() {
+		int roll[] = {2, 2, 3, 3, 3};
+		MouseEvent threeOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fourOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOUR_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fullHouseClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FULL_HOUSE_ROW_Y, 1, false);
+		MouseEvent smallStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SM_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent largeStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent yahtzeeClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent chanceClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, CHANCE_ROW_Y, 1, false);
+		
+		// let full house row column 2 have a null value
+		ScorePad.update(roll);
+		GUI.handleRowClick(threeOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fullHouseClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(smallStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(largeStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeClick);
+		GUI.handleRowClick(yahtzeeBonusClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(chanceClick);
+		GUI.scoreTable.setValueAt(null, GUI.FULL_HOUSE_ROW, 2);
+		int expectedSum = ScorePad.sum(roll) + ScorePad.sum(roll);
+		assertEquals(GUI.sumLower(), expectedSum);
+		
+		// let full house row column 2 not have a null value
+		ScorePad.update(roll);
+		GUI.handleRowClick(threeOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fullHouseClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(smallStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(largeStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeClick);
+		GUI.handleRowClick(yahtzeeBonusClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(chanceClick);
+		GUI.scoreTable.setValueAt("X", GUI.FULL_HOUSE_ROW, 2);
+		expectedSum = ScorePad.sum(roll) + ScorePad.FULL_HOUSE_SCORE +ScorePad.sum(roll);
+		assertEquals(GUI.sumLower(), expectedSum);
+	}
+	
+	@Test
+	public void testSumLowerC() {
+		int roll[] = {2, 2, 3, 3, 3};
+		MouseEvent threeOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fourOfKindClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOUR_OF_KIND_ROW_Y, 1, false);
+		MouseEvent fullHouseClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FULL_HOUSE_ROW_Y, 1, false);
+		MouseEvent smallStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, SM_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent largeStraightClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, LG_STRAIGHT_ROW_Y, 1, false);
+		MouseEvent yahtzeeClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
+		MouseEvent yahtzeeBonusClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
+		MouseEvent chanceClick = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, CHANCE_ROW_Y, 1, false);
+		
+		// let full house row column 2 have a X value
+		ScorePad.update(roll);
+		GUI.handleRowClick(threeOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fullHouseClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(smallStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(largeStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeClick);
+		GUI.handleRowClick(yahtzeeBonusClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(chanceClick);
+		GUI.scoreTable.setValueAt("X", GUI.FULL_HOUSE_ROW, 2);
+		int expectedSum = ScorePad.sum(roll) + ScorePad.FULL_HOUSE_SCORE +ScorePad.sum(roll);
+		assertEquals(GUI.sumLower(), expectedSum);
+		
+		// let full house row column 2 not have a X value
+		ScorePad.update(roll);
+		GUI.handleRowClick(threeOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fourOfKindClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(fullHouseClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(smallStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(largeStraightClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(yahtzeeClick);
+		GUI.handleRowClick(yahtzeeBonusClick);
+		ScorePad.update(roll);
+		GUI.handleRowClick(chanceClick);
+		GUI.scoreTable.setValueAt("Y", GUI.FULL_HOUSE_ROW, 2);
+		expectedSum = ScorePad.sum(roll) + ScorePad.sum(roll);
+		assertEquals(GUI.sumLower(), expectedSum);
+	}
+	
+	@Test
+	public void testDiceConstructor() {
+		Dice dice = null;
+		try {
+			dice = new Dice();
+		} catch(Exception e) {
+			// i = 5 should break the loop and not try to
+			// access a element out of the bounds of the dice array
+			fail();
+		}
+		
+		// i < 5 should allow the loop body to execute
+		// which means each index in the dice array should have a value > 0
+		for(int num : dice.getDiceValues()) {
+			assertEquals(num > 0, true);
+		}
+	}
+	
+	@Test
+	public void testRerollA() {
+		Dice dice = new Dice();
+		int[] previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		do {
+			// a is true
+			dice.reroll(true, false, false, false, false);
+		} while(dice.getDiceValues()[0] == previousDiceValues[0]);
+		
+		assertEquals(dice.getDiceValues()[0] == previousDiceValues[0], false);
+		
+		dice = null;
+		doAfter();
+		doBefore();
+		
+		dice = new Dice();
+		previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		// a is false
+		dice.reroll(false, false, false, false, false);
+		assertEquals(dice.getDiceValues()[0], previousDiceValues[0]);
+	}
+	
+	@Test
+	public void testRerollB() {
+		Dice dice = new Dice();
+		int[] previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		do {
+			// b is true
+			dice.reroll(false, true, false, false, false);
+		} while(dice.getDiceValues()[1] == previousDiceValues[1]);
+		
+		assertEquals(dice.getDiceValues()[1] == previousDiceValues[1], false);
+		
+		dice = null;
+		doAfter();
+		doBefore();
+		
+		dice = new Dice();
+		previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		// b is false
+		dice.reroll(false, false, false, false, false);
+		assertEquals(dice.getDiceValues()[1], previousDiceValues[1]);
+	}
+	
+	@Test
+	public void testRerollC() {
+		Dice dice = new Dice();
+		int[] previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		do {
+			// c is true
+			dice.reroll(false, false, true, false, false);
+		} while(dice.getDiceValues()[2] == previousDiceValues[2]);
+		
+		assertEquals(dice.getDiceValues()[2] == previousDiceValues[2], false);
+		
+		dice = null;
+		doAfter();
+		doBefore();
+		
+		dice = new Dice();
+		previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		// c is false
+		dice.reroll(false, false, false, false, false);
+		assertEquals(dice.getDiceValues()[2], previousDiceValues[2]);
+	}
+	
+	@Test
+	public void testRerollD() {
+		Dice dice = new Dice();
+		int[] previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		do {
+			// d is true
+			dice.reroll(false, false, false, true, false);
+		} while(dice.getDiceValues()[3] == previousDiceValues[3]);
+		
+		assertEquals(dice.getDiceValues()[3] == previousDiceValues[3], false);
+		
+		dice = null;
+		doAfter();
+		doBefore();
+		
+		dice = new Dice();
+		previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		// d is false
+		dice.reroll(false, false, false, false, false);
+		assertEquals(dice.getDiceValues()[3], previousDiceValues[3]);
+	}
+	
+	@Test
+	public void testRerollE() {
+		Dice dice = new Dice();
+		int[] previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		do {
+			// e is true
+			dice.reroll(false, false, false, false, true);
+		} while(dice.getDiceValues()[4] == previousDiceValues[4]);
+		
+		assertEquals(dice.getDiceValues()[4] == previousDiceValues[4], false);
+		
+		dice = null;
+		doAfter();
+		doBefore();
+		
+		dice = new Dice();
+		previousDiceValues = Arrays.copyOf(dice.getDiceValues(), 5);
+		// e is false
+		dice.reroll(false, false, false, false, false);
+		assertEquals(dice.getDiceValues()[4], previousDiceValues[4]);
+	}
+	
+	@Test
+	public void testResetDice() {
+		Dice dice = new Dice();
+		try {
+			dice.resetDice();
+		} catch(Exception e) {
+			// i = 5 should break the loop and not try to
+			// access a element out of the bounds of the dice array
+			fail();
+		}
+		
+		// i < 5 should allow the loop body to execute
+		// which means each index in the dice array should have a value > 0
+		for(int num : dice.getDiceValues()) {
+			assertEquals(num > 0, true);
+		}
 	}
 }
