@@ -12,7 +12,7 @@ public class Dice {
 	// rounds array to hold dice arrays
 	private int[][] rounds = new int[13][];
 
-	// constructor uses for loop to fill array and randommize dice values
+	// constructor uses for loop to fill array and randomize dice values
 	public Dice() {
 		for (int i = 0; i < 5; i++) {
 			dice[i] = 1 + (int) (Math.random() * 6);
