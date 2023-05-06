@@ -114,47 +114,4 @@ public class Dice {
 	public void resetRounds() {
 		rounds = new int[13][];
 	}
-
-	//public static void main(String[] args) {
-	//	Dice d = new Dice();
-	//	d.printDice();
-	//	d.reroll(true, false, true, true, false); //reroll dice 1, 3, and 4
-	//	d.printDice();
-	//	d.reroll(false, true, false, true, false); //reroll dice 2 and 4
-	//	d.printDice();
-  //
-	//	d.finishRound(); //1
-	//	d.printDice();
-	//	
-	//	d.finishRound(); //2
-	//	d.finishRound(); //3
-	//	d.printDice();
-	//	
-	//	d.finishRound(); //4
-	//	d.finishRound(); //5
-	//	d.finishRound(); //6
-	//	d.finishRound(); //7
-	//	d.finishRound(); //8
-	//	d.finishRound(); //9
-	//	d.finishRound(); //10
-	//	d.finishRound(); //11
-	//	d.finishRound(); //12
-	//	d.finishRound(); //13
-	//	d.finishRound(); //14 (not allowed)
-	//	d.finishRound(); //15 (not allowed)
-	//	d.printRounds();
-	//	
-	//	d.resetRounds();
-	//	d.printRounds();
-	//	
-	//	d.finishRound();
-	//	d.finishRound();
-	//	d.printRounds();
-  //
-	//	d.finishRound();
-	//	d.printRounds();
-  //
-	//	
-	//}
-    
 }
