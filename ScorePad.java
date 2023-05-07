@@ -32,9 +32,8 @@ public class ScorePad {
 			return;
 		}
 		
-		checkDice(roll);
-		
 		if(roll != null && roll.length == 5) {
+			checkDice(roll);
 			GUI.dice1.setText("" + roll[0]);
 			GUI.dice2.setText("" + roll[1]);
 			GUI.dice3.setText("" + roll[2]);
@@ -371,7 +370,13 @@ public class ScorePad {
 		return true;
 	}
 	
-	private static void checkDice(int roll[]) {
+	/**
+	 * Checks the values in a dice roll to ensure they fall in range
+	 * [1, 6] inclusive. Throws an IllegalArgumentException if they don't.
+	 * 
+	 * @param roll dice values to verify.
+	 */
+	public static void checkDice(int roll[]) {
 		for (int num : roll) {
 			if (num < 1 || num > 6) {
 				throw new IllegalArgumentException();

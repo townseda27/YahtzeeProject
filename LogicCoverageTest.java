@@ -707,7 +707,6 @@ public class LogicCoverageTest {
 		// rolled yahtzee and score table value at yahtzee row is not 0
 		ScorePad.update(yahtzeeRoll);
 		MouseEvent event1 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_Y, 1, false);
-		MouseEvent event2 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, YAHTZEE_ROW_BONUS_Y, 1, false);
 		GUI.handleRowClick(event1);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.YAHTZEE_ROW, 1), 50);
 		ScorePad.update(yahtzeeRoll);
@@ -1756,4 +1755,49 @@ public class LogicCoverageTest {
 			assertEquals(num > 0, true);
 		}
 	}
+	
+	@Test
+	public void testCheckDiceA() {
+		// roll has length 0 - for body doesn't execute
+		int[] noLengthRoll = new int[0];
+		try {
+			ScorePad.checkDice(noLengthRoll);
+		} catch(Exception e) {
+			fail();
+		}
+		
+		// roll has length > 0 - for body executes
+		int[] badRoll = {1, 2, 3, 7, -1};
+		try {
+			ScorePad.checkDice(badRoll);
+			fail();
+		} catch(Exception e) {}
+	}
+	
+	@Test
+	public void testCheckDiceB() {
+		// num < 1
+		int[] roll1 = {1, 2, 3, 0, 5};
+		try {
+			ScorePad.checkDice(roll1);
+			fail();
+		} catch(Exception e) {}
+		
+		// num > 6
+		int[] roll2 = {1, 7, 3, 4, 5};
+		try {
+			ScorePad.checkDice(roll2);
+			fail();
+		} catch(Exception e) {}
+		
+		// num >= 1 and num <= 6
+		int[] roll3 = {1, 2, 3, 4, 5};
+		try {
+			ScorePad.checkDice(roll3);
+		} catch(Exception e) {
+			fail();
+		}
+	}
+	
+	
 }
