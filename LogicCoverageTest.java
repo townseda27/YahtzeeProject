@@ -433,29 +433,34 @@ public class LogicCoverageTest {
 	
 	@Test
 	public void testScoreXOfAKind() {
-		int[] roll4OfAKind = {1, 1, 1, 1, 2};
-		int[] rollNo4OfAKind = {1, 2, 3, 4, 5};
-		ScorePad.update(roll4OfAKind);
-		MouseEvent eventRow3 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, THREE_OF_KIND_ROW_Y, 1, false);
-		GUI.handleRowClick(eventRow3);
-		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), 6);
-		ScorePad.update(roll4OfAKind);
-		MouseEvent eventRow4 = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FOUR_OF_KIND_ROW_Y, 1, false);
-		GUI.handleRowClick(eventRow4);
-		assertEquals(GUI.scoreTable.getValueAt(GUI.FOUR_OF_A_KIND_ROW, 1), 6);
+		int[] roll3OfAKind = {1, 1, 1, 2, 3};
+		int[] rollNot3OfAKind = {1, 2, 3, 4, 3};
 		
-		doAfter();
-		doBefore();
+		// rolled at least 3 of kind, x = 3
+		ScorePad.update(roll3OfAKind);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), ScorePad.sum(roll3OfAKind));
 		
-		ScorePad.update(rollNo4OfAKind);
+		// rolled at least 3 of kind, x < 3
+		assertEquals(ScorePad.isAtLeastXOfKind(roll3OfAKind, 2), true);
+		
+		// rolled at least 3 of kind, x > 3
+		ScorePad.update(roll3OfAKind);
+		assertEquals(GUI.scoreTable.getValueAt(GUI.FOUR_OF_A_KIND_ROW, 1), 0);
+		
+		// didn't roll at least 3 of kind, x = 3
+		ScorePad.update(rollNot3OfAKind);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.THREE_OF_A_KIND_ROW, 1), 0);
-		ScorePad.update(rollNo4OfAKind);
-		GUI.handleRowClick(eventRow4);
+		
+		// didn't roll at least 3 of kind, x < 3
+		assertEquals(ScorePad.isAtLeastXOfKind(rollNot3OfAKind, 2), true);
+		
+		// didn't roll at least 3 of kind, x > 3
+		ScorePad.update(roll3OfAKind);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FOUR_OF_A_KIND_ROW, 1), 0);
 	}
 	
 	@Test
-	public void testScoreFullHouse() {
+	public void testScoreFullHouseA() {
 		// full house row is used
 		int roll[] = {1, 1, 2, 2, 2};
 		ScorePad.update(roll);
@@ -475,10 +480,11 @@ public class LogicCoverageTest {
 		GUI.handleRowClick(event);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), 25);
 		
-		doAfter();
-		doBefore();
-		
+	}
+	@Test
+	public void testScoreFullHouseB() {
 		// roll is a full house
+		MouseEvent event = new MouseEvent(GUI.scoreTable, 0, 0, 0, ROW_X, FULL_HOUSE_ROW_Y, 1, false);
 		assertEquals(GUI.scoreTable.getValueAt(GUI.FULL_HOUSE_ROW, 1), null);
 		int[] fullHouseRoll = {1, 1, 1, 2, 2};
 		ScorePad.update(fullHouseRoll);
