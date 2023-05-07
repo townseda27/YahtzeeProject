@@ -373,7 +373,7 @@ public class ScorePad {
 	
 	private static void checkDice(int roll[]) {
 		for (int num : roll) {
-			if (num <1 || num >6) {
+			if (num < 1 || num > 6) {
 				throw new IllegalArgumentException();
 			}
 		}
