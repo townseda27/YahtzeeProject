@@ -3,10 +3,14 @@ package YahtzeeProject;
 import java.util.Arrays;
 
 /**
+ * CSE 321 - Final Project
+ * 
  * Represents the score pad in the game Yahtzee. The {@code update()}
- * method will 
+ * method will "refresh" the score pad with the would-be score given the current dice roll.
  * 
  * @author Daniel Townsend
+ * 
+ * Group members: Mason Grant, Eric Khmelnitsky, and Daniel Townsend
  */
 public class ScorePad {
 	

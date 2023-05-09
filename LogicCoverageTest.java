@@ -23,7 +23,15 @@ import javax.swing.table.DefaultTableModel;
 
 import junit.framework.JUnit4TestAdapter;
 
-
+/**
+ * CSE 321 - Final Project
+ * 
+ * Logic Coverage Unit Tests
+ * 
+ * @author Daniel Townsend
+ *
+ * Group members: Mason Grant, Eric Khmelnitsky, and Daniel Townsend
+ */
 public class LogicCoverageTest {
 
 	private final int ROW_X = 185;

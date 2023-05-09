@@ -1,9 +1,19 @@
 package YahtzeeProject;
 
-// This class creates a Dice object that contains the dice int[] array and the rounds int[][] 2D array.
-// The arrays can be accessed by using the getDiceValues() method to get the current dice values,
-// and the getDiceArrays() method to get the dice arrays that have been stored in the rounds array.
 
+
+/**
+ * CSE 321 - Final Project
+ * 
+ * This class creates a Dice object that contains the dice int[] array and the rounds int[][] 2D array.
+ * The arrays can be accessed by using the getDiceValues() method to get the current dice values,
+ * and the getDiceArrays() method to get the dice arrays that have been stored in the rounds array.
+ * 
+ * @author Eric Khmelnitsky
+ * 
+ * Group members: Mason Grant, Eric Khmelnitsky, and Daniel Townsend
+ *
+ */
 public class Dice {
 
 	// dice array to hold dice values

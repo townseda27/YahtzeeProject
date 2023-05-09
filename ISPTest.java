@@ -18,6 +18,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * CSE 321 - Final Project
+ * 
+ * ISP Unit Tests
+ * 
+ * @author Mason Grant
+ * 
+ * Group members: Mason Grant, Eric Khmelnitsky, and Daniel Townsend
+ *
+ */
 public class ISPTest {
 	
 	//Setting up doBefore and doAfter ---------------------------------------

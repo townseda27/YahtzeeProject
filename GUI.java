@@ -22,6 +22,15 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
+/**
+ * CSE 321 - Final Project
+ * 
+ * GUI for the project.
+ * 
+ * @author Mason Grant
+ *
+ * Group members: Mason Grant, Eric Khmelnitsky, and Daniel Townsend
+ */
 public class GUI {
 
 	public static JFrame frmYahtzeegui;
