@@ -552,6 +552,8 @@ public class GUI {
 			}
 			if(scoreTable.getValueAt(row, 2).equals("X")) {
 				score += (int) scoreTable.getValueAt(row, 1);
+			} else {
+				scoreTable.setValueAt(0, row, 1);
 			}
 		}
 		return score;
@@ -565,6 +567,8 @@ public class GUI {
 			}
 			if(scoreTable.getValueAt(row, 2).equals("X")) {
 				score += (int) scoreTable.getValueAt(row, 1);
+			} else {
+				scoreTable.setValueAt(0, row, 1);
 			}
 		}
 		return score;
@@ -573,7 +577,7 @@ public class GUI {
 	public static void clearScoreTable() {
 		for(int row = 2; row <= GRAND_TOTAL_ROW; row++) {
 			scoreTable.setValueAt(null, row, 1);
-			scoreTable.setValueAt(null, row, 2);
+			scoreTable.setValueAt("", row, 2);
 		}
 	}
 	
